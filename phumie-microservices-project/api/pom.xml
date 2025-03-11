@@ -33,19 +33,13 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-gateway</artifactId>
+			<artifactId>spring-cloud-starter-gateway</artifactId>
 			<version>4.2.0</version>
-			<type>pom</type>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>

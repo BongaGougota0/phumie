@@ -4,6 +4,8 @@ server:
     context-path: /api-gateway
 
 spring:
+  application:
+    name: api-gateway
   cloud:
     gateway:
       routes:
@@ -23,7 +25,10 @@ spring:
           uri: lb://like-service
           predicates:
             - Path=/api/likes/**
+
 eureka:
   client:
     service-url:
-      defaultZone: "http:localhost:8761/eureka"
+      defaultZone: http://localhost:8761/eureka/
+      fetch-registry: true
+      register-with-eureka: true
