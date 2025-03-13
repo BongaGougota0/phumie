@@ -6,4 +6,9 @@ import za.co.phumie.model.PhumieUser;
 
 @Repository
 public interface UserRepository extends JpaRepository<PhumieUser, Long> {
+    PhumieUser findPhumieUserByUserEmail(String userEmail);
+
+    PhumieUser findPhumieUserByUsername(String name);
+
+    PhumieUser getPhumieUserByUserEmail(String userEmail);
 }
