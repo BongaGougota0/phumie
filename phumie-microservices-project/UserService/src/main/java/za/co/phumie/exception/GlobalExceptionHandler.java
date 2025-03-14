@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResponseDto> userNotFound(String message){
         ResponseDto responseDto = new ResponseDto();
         responseDto.setMessage(String.format(USER_DOES_NOT_EXIST, message));
-        return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UserExistsException.class)
@@ -23,5 +23,12 @@ public class GlobalExceptionHandler {
         ResponseDto responseDto = new ResponseDto();
         responseDto.setMessage(String.format(USER_EXISTS_EXCEPTION,message));
         return ResponseEntity.status(HttpStatus.CONFLICT).body(responseDto);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ResponseDto> illegalArgument(String message){
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setMessage(String.format(USER_EXISTS_EXCEPTION,message));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
     }
 }

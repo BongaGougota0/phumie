@@ -9,7 +9,7 @@ import za.co.phumie.dto.ResponseDto;
 import za.co.phumie.service.UsersService;
 
 @RestController
-@RequestMapping(path = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UsersController {
     private final UsersService usersService;
 
@@ -18,8 +18,8 @@ public class UsersController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<?> getUserById(@PathVariable Long userId){
-        return ResponseEntity.ok().body(null);
+    public ResponseEntity<PhumieUserDto> getUserById(@PathVariable Long userId){
+        return ResponseEntity.ok().body(usersService.getUserById(userId));
     }
 
     @PostMapping("/login")
@@ -39,8 +39,8 @@ public class UsersController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateUser(@RequestBody PhumieUserDto phumieUserDto){
-        return ResponseEntity.ok().body(null);
+    public ResponseEntity<ResponseDto> updateUser(@RequestBody PhumieUserDto phumieUserDto){
+        return ResponseEntity.ok().body(usersService.putUserDetails(phumieUserDto));
     }
 
     @PutMapping("/update-username/{oldUsername}")

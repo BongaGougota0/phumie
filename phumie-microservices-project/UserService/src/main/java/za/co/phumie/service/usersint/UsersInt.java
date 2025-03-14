@@ -9,4 +9,5 @@ public interface UsersInt {
     public String createNewUser(String firstName, String lastName, String email, String password);
     public String updateUserName(PhumieUserDto userDto);
     public String updateUserEmail(PhumieUserDto userDto);
+    public PhumieUser getUserByEmailOrUsername(String emailOrUsername);
 }
