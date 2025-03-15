@@ -15,7 +15,8 @@ public class Post {
     private Long postId;
     private String postContent;
     private LocalDateTime timeStamp;
-    private String author;
+    private Long authorUserId;
+    private String authorUsername;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();

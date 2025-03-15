@@ -2,6 +2,7 @@ package za.co.phumie.PostsService.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -9,9 +10,11 @@ import lombok.Data;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long commentId;
     private String content;
-    private String author;
+    private LocalDateTime timeStamp;
+    private Long authorUserId;
+    private String authorUsername;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;

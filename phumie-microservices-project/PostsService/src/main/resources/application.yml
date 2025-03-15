@@ -1,14 +1,10 @@
 server:
-  port: 8081
-  servlet:
-    context-path: /api/posts
-
+  port: 8082
 spring:
   application:
     name: post-service
-
   datasource:
-    url: jdbc:mysql://localhost:3306/classicmodels
+    url: jdbc:mysql://localhost:3306/phumie_project
     username: root
     password: "@ZXCp0001"
     driver-class-name: com.mysql.cj.jdbc.Driver

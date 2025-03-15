@@ -1,7 +1,17 @@
-CREATE TABLE Post (
-  id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  text_content TEXT,               -- Nullable
-  image_url VARCHAR(255),          -- Nullable
-  timestamp DATETIME NOT NULL,
-  author_id BIGINT NOT NULL        -- Foreign key to UserService
-);
+CREATE TABLE IF NOT EXISTS `posts`(
+   post_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+   post_content TEXT,
+   time_stamp TIMESTAMP,
+   author_user_id BIGINT,
+   author_username VARCHAR(255)
+)
+
+CREATE TABLE IF NOT EXISTS `comments`(
+    comment_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    content TEXT,
+    time_stamp TIMESTAMP,
+    author_user_id BIGINT,
+    author_username VARCHAR(255),
+    post_id BIGINT,
+    FOREIGN KEY (post_id) REFERENCES posts(post_id)
+)
