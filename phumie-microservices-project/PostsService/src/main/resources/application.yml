@@ -1,5 +1,6 @@
 server:
   port: 8082
+
 spring:
   application:
     name: post-service
@@ -9,12 +10,10 @@ spring:
     password: "@ZXCp0001"
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      maximum-pool-size: 10 # Maximum number of connections in the pool
-      minimum-idle: 2 # Minimum number of idle connections
-      idle-timeout: 30000 # Time in milliseconds before an idle connection is removed
-      max-lifetime: 1800000 # Maximum lifetime of a connection in the pool
-
-  # JPA (Hibernate) configuration
+      maximum-pool-size: 10
+      minimum-idle: 2
+      idle-timeout: 30000
+      max-lifetime: 1800000
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
@@ -23,6 +22,15 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    appname: post-service
+    instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true  # Critical for service discovery
 
 logging:
   level:
@@ -33,3 +41,12 @@ logging:
 app:
   welcome-message: "Welcome to the Posts Service for Phumie"
   max-retries: 3
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always

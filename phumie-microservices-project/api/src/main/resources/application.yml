@@ -6,13 +6,19 @@ spring:
     name: api-gateway
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true  # Optional: Auto-route services by name
+      httpclient:
+        connect-timeout: 2000
+        response-timeout: 5s
       routes:
         - id: user-service
           uri: lb://user-service
           predicates:
             - Path=/api/users/**
         - id: post-service
-          uri: lb://post-service
+          uri: lb://POST-SERVICE
           predicates:
             - Path=/api/posts/**
         - id: feed-service
@@ -28,5 +34,7 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
-      fetch-registry: true
-      register-with-eureka: true
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    hostname: localhost

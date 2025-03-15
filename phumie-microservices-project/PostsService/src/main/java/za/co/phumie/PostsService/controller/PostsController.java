@@ -7,12 +7,11 @@ import za.co.phumie.PostsService.dto.PostDto;
 import za.co.phumie.PostsService.dto.ResponseDto;
 import za.co.phumie.PostsService.model.Post;
 import za.co.phumie.PostsService.service.PostsServiceImpl;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/posts", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/posts", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PostsController {
 
     private final PostsServiceImpl postsServiceImpl;

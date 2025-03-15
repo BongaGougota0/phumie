@@ -4,14 +4,17 @@ import org.hibernate.query.Page;
 import org.springframework.stereotype.Service;
 import za.co.phumie.PostsService.dto.CommentDto;
 import za.co.phumie.PostsService.dto.PostDto;
+import za.co.phumie.PostsService.exception.EmptyUsernamePostException;
 import za.co.phumie.PostsService.model.Post;
 import za.co.phumie.PostsService.repository.PostsRepository;
 import za.co.phumie.PostsService.service.postsInt.IPosts;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class PostsServiceImpl implements IPosts {
+
     private final PostsRepository postsRepository;
 
     public PostsServiceImpl(PostsRepository postsRepository) {
@@ -35,8 +38,9 @@ public class PostsServiceImpl implements IPosts {
     @Override
     public void createPost(Post post) {
         if(post == null){
-            throw new NullPointerException("post is null");
-        };
+            throw new EmptyUsernamePostException("Invalid post request, username required");
+        }
+        post.setTimeStamp(LocalDateTime.now());
         postsRepository.save(post);
     }
 
