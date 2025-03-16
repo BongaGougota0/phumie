@@ -1,11 +1,11 @@
 package za.co.phumie.PostsService.service;
 
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import za.co.phumie.PostsService.controller.PostsController;
 import za.co.phumie.PostsService.dto.CommentDto;
 import za.co.phumie.PostsService.dto.PostDto;
 import za.co.phumie.PostsService.exception.EmptyUsernamePostException;
@@ -60,6 +60,7 @@ public class PostsServiceImpl implements IPosts {
         if(post == null){
             throw new EmptyUsernamePostException(INVALID_POST_REQUEST);
         }
+        post.setAuthorUserId(PostsController.transformUsernameToAuthorId(post.getAuthorUsername()));
         post.setTimeStamp(LocalDateTime.now());
         postsRepository.save(post);
     }

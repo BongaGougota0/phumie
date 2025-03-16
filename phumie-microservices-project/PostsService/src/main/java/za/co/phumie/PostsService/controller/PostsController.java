@@ -1,6 +1,5 @@
 package za.co.phumie.PostsService.controller;
 
-import org.apache.http.HttpClientConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -57,16 +56,14 @@ public class PostsController {
         return ResponseEntity.ok().body(posts);
     }
 
-    private long transformUsernameToAuthorId(String username) {
-        logger.debug("transformUsernameToAuthorId: " + username);
+    public static long transformUsernameToAuthorId(String username) {
         RestTemplate restTemplate = new RestTemplate();
         try{
             String url = "http://localhost:8080/api/users/get?username={username}";
             ResponseEntity<Long> response = restTemplate.getForEntity(url, Long.class, username);
-            logger.debug("transformUsernameToAuthorId: " + response.getBody());
             return response.getBody();
         }catch (HttpClientErrorException.NotFound e){
-            throw new IllegalArgumentException("illegal args");
+            throw new IllegalArgumentException("Illegal arguments exception \n"+ e.getMessage());
         }
     }
 }

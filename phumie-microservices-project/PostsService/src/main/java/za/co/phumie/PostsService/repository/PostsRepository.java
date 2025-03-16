@@ -15,4 +15,6 @@ public interface PostsRepository extends JpaRepository<Post, Long> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM Posts p WHERE p.author_user_id = :authorUserId")
     Page<Post> getPostByAuthorUserId(@Param("authorUserId") long authorUserId, Pageable pageable);
+
+    Post findPostByPostId(long postId);
 }
