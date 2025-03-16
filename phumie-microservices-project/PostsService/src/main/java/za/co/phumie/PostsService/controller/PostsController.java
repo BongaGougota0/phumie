@@ -1,8 +1,14 @@
 package za.co.phumie.PostsService.controller;
 
+import org.apache.http.HttpClientConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 import za.co.phumie.PostsService.dto.PostDto;
 import za.co.phumie.PostsService.dto.ResponseDto;
 import za.co.phumie.PostsService.model.Post;
@@ -13,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/posts", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PostsController {
+    Logger logger = LoggerFactory.getLogger(PostsController.class);
 
     private final PostsServiceImpl postsServiceImpl;
 
@@ -43,9 +50,23 @@ public class PostsController {
         return ResponseEntity.ok().body(responseDto);
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<List<Post>> geUserPosts(@RequestParam("email") String userEmail){
-        List<Post> posts = postsServiceImpl.geUserPosts(userEmail);
+    @GetMapping("/user/{pageNumber}")
+    public ResponseEntity<Page<Post>> geUserPosts(@RequestParam("username") String username, @PathVariable int pageNumber) {
+        long authorId = transformUsernameToAuthorId(username);
+        Page<Post> posts = postsServiceImpl.getUserPostsByUsernameOrId(authorId, pageNumber);
         return ResponseEntity.ok().body(posts);
+    }
+
+    private long transformUsernameToAuthorId(String username) {
+        logger.debug("transformUsernameToAuthorId: " + username);
+        RestTemplate restTemplate = new RestTemplate();
+        try{
+            String url = "http://localhost:8080/api/users/get?username={username}";
+            ResponseEntity<Long> response = restTemplate.getForEntity(url, Long.class, username);
+            logger.debug("transformUsernameToAuthorId: " + response.getBody());
+            return response.getBody();
+        }catch (HttpClientErrorException.NotFound e){
+            throw new IllegalArgumentException("illegal args");
+        }
     }
 }

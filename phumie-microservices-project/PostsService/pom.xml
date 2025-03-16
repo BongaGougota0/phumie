@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>za.co.phumie</groupId>
-	<artifactId>PostsService</artifactId>
+	<artifactId>PostService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>PostsService</name>
+	<name>PostService</name>
 	<description>user posts microservice</description>
 	<url/>
 	<licenses>
