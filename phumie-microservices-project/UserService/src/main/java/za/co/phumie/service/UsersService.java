@@ -46,6 +46,10 @@ public class UsersService {
         return UserMapper.mapEntityToDto(user);
     }
 
+    public Long getUserByUsername(String username){
+        return userRepository.findPhumieUserByUsername(username).getUserId();
+    }
+
     /**
      * Updates user details in the system
      * @param userDto The user details to update

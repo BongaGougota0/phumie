@@ -22,6 +22,11 @@ public class UsersController {
         return ResponseEntity.ok().body(usersService.getUserById(userId));
     }
 
+    @GetMapping("/get")
+    public ResponseEntity<Long> getUserIdByUsername(@RequestParam("username") String username){
+        return ResponseEntity.ok().body(usersService.getUserByUsername(username));
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginCredentials loginCredentials){
 
