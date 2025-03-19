@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -16,4 +19,7 @@ public class PhumieUser {
     private String password;
     private UserRole userRole;
     private String aboutUser;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Follower> followers = new ArrayList<>();
 }
