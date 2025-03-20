@@ -1,5 +1,6 @@
 package za.co.phumie.service;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import za.co.phumie.dto.PhumieUserDto;
@@ -39,6 +40,7 @@ public class UsersService {
         return responseDto;
     }
 
+    @Cacheable(value = "users", key = "#userid")
     public PhumieUserDto getUserById(Long userid){
         PhumieUser user = userRepository.findById(userid).orElseThrow(
                 () -> new UserNotFound(String.format("User with id %s not found", userid))
@@ -46,6 +48,7 @@ public class UsersService {
         return UserMapper.mapEntityToDto(user);
     }
 
+    @Cacheable(value = "userids", key = "#username")
     public Long getUserByUsername(String username){
         return userRepository.findPhumieUserByUsername(username).getUserId();
     }
@@ -79,6 +82,7 @@ public class UsersService {
      * @return Found user or null if not found
      * @throws IllegalArgumentException if neither email nor username is provided
      */
+    @Cacheable(value = "phumieUser", key = "#userDto.username()")
     public PhumieUser getUserByEmailOrUsername(PhumieUserDto userDto) {
         if (userDto == null) {
             throw new IllegalArgumentException("User details cannot be null");
@@ -102,10 +106,10 @@ public class UsersService {
         if(checkExistingUser == null){
             toBeUpdatedUser.setUsername(userDto.username());
             userRepository.save(toBeUpdatedUser);
+            return true;
         }else{
             throw new UserExistsException(userDto.username());
         }
-        return true;
     }
 
     public void putPassword(PhumieUserDto dto){

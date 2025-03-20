@@ -55,7 +55,7 @@ public class UsersController {
         if(isUpdated){
             var response = new ResponseDto();
             response.setMessage("username updated");
-            return ResponseEntity.ok().body(null);
+            return ResponseEntity.ok().body(response);
         }else{
             return ResponseEntity.badRequest().body(null);
         }

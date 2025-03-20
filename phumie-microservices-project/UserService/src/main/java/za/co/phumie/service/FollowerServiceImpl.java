@@ -14,6 +14,7 @@ public class FollowerServiceImpl implements IFollower {
     public FollowerServiceImpl(FollowerRepository followerRepository) {
         this.followerRepository = followerRepository;
     }
+
     @Override
     public List<FollowerDto> getCurrentUserFollower(long subjectUserId) {
         return List.of();

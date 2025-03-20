@@ -1,5 +1,6 @@
 package za.co.phumie.PostsService.service;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +33,11 @@ public class PostsServiceImpl implements IPosts {
     public PostsServiceImpl(PostsRepository postsRepository, CommentsRepository commentsRepository) {
         this.postsRepository = postsRepository;
         this.commentsRepository = commentsRepository;
+    }
+
+    @Cacheable(value = "posts", key = "postId")
+    public Post getPostObjectById(long postId){
+        return postsRepository.findPostByPostId(postId);
     }
 
     public List<PostDto> getRandomPostsForWelcomeScreen() {
