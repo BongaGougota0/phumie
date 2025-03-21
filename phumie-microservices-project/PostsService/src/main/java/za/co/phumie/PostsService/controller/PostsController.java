@@ -8,10 +8,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import za.co.phumie.PostsService.dto.CommentDto;
 import za.co.phumie.PostsService.dto.PostDto;
 import za.co.phumie.PostsService.dto.ResponseDto;
+import za.co.phumie.PostsService.mapper.CommentMapper;
+import za.co.phumie.PostsService.model.Comment;
 import za.co.phumie.PostsService.model.Post;
+import za.co.phumie.PostsService.repository.CommentsRepository;
 import za.co.phumie.PostsService.service.PostsServiceImpl;
+import za.co.phumie.PostsService.service.postsInt.IComments;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,9 +26,12 @@ public class PostsController {
     Logger logger = LoggerFactory.getLogger(PostsController.class);
 
     private final PostsServiceImpl postsServiceImpl;
+    private final CommentsRepository commentsRepository;
 
-    public PostsController(PostsServiceImpl postsServiceImpl) {
+    public PostsController(PostsServiceImpl postsServiceImpl,
+                           CommentsRepository commentsRepository) {
         this.postsServiceImpl = postsServiceImpl;
+        this.commentsRepository = commentsRepository;
     }
 
     @GetMapping("")
@@ -47,6 +55,21 @@ public class PostsController {
         responseDto.setTimestamp(LocalDateTime.now());
         responseDto.setMicroserviceName("posts_microservice");
         return ResponseEntity.ok().body(responseDto);
+    }
+
+    @PostMapping("/comment")
+    public ResponseEntity<ResponseDto> postComment(@RequestParam("postId") long postId, @RequestBody CommentDto commentDto){
+        IComments comments = comment1 -> {
+            commentsRepository.save(comment1);
+            ResponseDto responseDto = new ResponseDto();
+            responseDto.setTimestamp(LocalDateTime.now());
+            responseDto.setMicroserviceName("post-service");
+            responseDto.setStatus("ok");
+            return responseDto;
+        };
+        Comment comment = CommentMapper.toEntity(commentDto);
+        comment.setPost(postsServiceImpl.getPostObjectById(postId));
+        return ResponseEntity.ok().body(comments.postComment(comment));
     }
 
     @GetMapping("/user/{pageNumber}")

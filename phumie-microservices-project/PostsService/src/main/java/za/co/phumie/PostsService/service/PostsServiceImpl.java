@@ -35,7 +35,7 @@ public class PostsServiceImpl implements IPosts {
         this.commentsRepository = commentsRepository;
     }
 
-    @Cacheable(value = "posts", key = "postId")
+    @Cacheable(value = "postEntitiesCache", key = "#postId")
     public Post getPostObjectById(long postId){
         return postsRepository.findPostByPostId(postId);
     }

@@ -25,14 +25,12 @@ spring:
       hibernate:
         format_sql: true
   cache:
-    type: redis
-    redis:
-      key-prefix: "user-service::"
-      time-to-live: 300s  # 5 minutes
-  data:
-    redis:
-      host: localhost
-      port: 6379
+    cache-names:
+      - userIdsCache
+      - userDtosCache
+      - userEntitiesCache
+    caffeine:
+      spec: initialCapacity=100,maximumSize=10,expireAfterAccess=400s
 
 logging:
   level:

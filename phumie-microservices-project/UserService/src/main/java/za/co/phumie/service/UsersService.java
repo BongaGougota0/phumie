@@ -40,7 +40,7 @@ public class UsersService {
         return responseDto;
     }
 
-    @Cacheable(value = "users", key = "#userid")
+    @Cacheable(value = "userDtosCache", unless = "#result == null")
     public PhumieUserDto getUserById(Long userid){
         PhumieUser user = userRepository.findById(userid).orElseThrow(
                 () -> new UserNotFound(String.format("User with id %s not found", userid))
@@ -48,7 +48,7 @@ public class UsersService {
         return UserMapper.mapEntityToDto(user);
     }
 
-    @Cacheable(value = "userids", key = "#username")
+    @Cacheable(value = "userIdsCache", unless = "#result == null")
     public Long getUserByUsername(String username){
         return userRepository.findPhumieUserByUsername(username).getUserId();
     }
@@ -82,7 +82,7 @@ public class UsersService {
      * @return Found user or null if not found
      * @throws IllegalArgumentException if neither email nor username is provided
      */
-    @Cacheable(value = "phumieUser", key = "#userDto.username()")
+    @Cacheable(value = "userEntitiesCache", key = "#userDto.username()")
     public PhumieUser getUserByEmailOrUsername(PhumieUserDto userDto) {
         if (userDto == null) {
             throw new IllegalArgumentException("User details cannot be null");
