@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.concurrent.TimeUnit;
 
 @EnableCaching
-@Configuration
+@Configuration("postsCacheConfig")
 public class CacheConfig {
 
     @Bean

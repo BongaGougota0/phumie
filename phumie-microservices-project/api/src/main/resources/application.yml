@@ -26,7 +26,7 @@ spring:
           predicates:
             - Path=/api/feed/**
         - id: likes-service
-          uri: lb://like-service
+          uri: lb://likes-service
           predicates:
             - Path=/api/likes/**
 
