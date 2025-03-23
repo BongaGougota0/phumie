@@ -1,0 +1,48 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: likes-service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/phumie_project
+    username: root
+    password: "@ZXCp0001"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10 # Maximum number of connections in the pool
+      minimum-idle: 2 # Minimum number of idle connections
+      idle-timeout: 30000 # Time in milliseconds before an idle connection is removed
+      max-lifetime: 1800000 # Maximum lifetime of a connection in the pool
+
+  # JPA (Hibernate) configuration
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: reactions
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    com.example.microservice: DEBUG
+
+app:
+  welcome-message: "Welcome to my (reactions) likes-microservice!"
+  max-retries: 3
