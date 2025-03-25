@@ -1,22 +1,26 @@
 package za.co.phumie.LikeService.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import za.co.phumie.LikeService.model.FollowDto;
 import za.co.phumie.LikeService.model.LikeDto;
 import za.co.phumie.LikeService.service.ILikes;
+import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/like")
+@RequestMapping(value = "/api/likes")
 public class LikesController {
 
     private final ILikes iLikes;
 
     public LikesController(ILikes iLikes) {
         this.iLikes = iLikes;
+    }
+
+    @GetMapping("/{userId}")
+    ResponseEntity<List<LikeDto>> getUserLikes(@PathVariable("userId") long userId){
+        List<LikeDto> userLikes = iLikes.getUserLikesByUserId(userId);
+        return ResponseEntity.ok().body(userLikes);
     }
 
     @PostMapping("")

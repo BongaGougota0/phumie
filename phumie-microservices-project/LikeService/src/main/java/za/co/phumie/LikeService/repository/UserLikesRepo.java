@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import za.co.phumie.LikeService.entity.UserLikes;
+import za.co.phumie.LikeService.model.LikeDto;
+import java.util.List;
 
 public interface UserLikesRepo extends JpaRepository<UserLikes, Long> {
     @Query(nativeQuery = true, value = "")
@@ -17,4 +19,7 @@ public interface UserLikesRepo extends JpaRepository<UserLikes, Long> {
 
     @Query(nativeQuery = true, value = "")
     String removeFollowing(@Param("userId") long userId, @Param("followerId") long followerId);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM likes WHERE user_id =:userId")
+    List<LikeDto> findUserLikesByUserId(@Param("userId") Long userId);
 }

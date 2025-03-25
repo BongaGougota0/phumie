@@ -2,6 +2,7 @@ package za.co.phumie.LikeService.service;
 
 import za.co.phumie.LikeService.model.FollowDto;
 import za.co.phumie.LikeService.model.LikeDto;
+import java.util.List;
 
 public interface ILikes {
     /**
@@ -24,4 +25,6 @@ public interface ILikes {
      * @return string message OK on success, FALSE already liked or an error happened
      */
     String likePostByPostId(LikeDto likeDto);
+
+    List<LikeDto> getUserLikesByUserId(long userId);
 }
