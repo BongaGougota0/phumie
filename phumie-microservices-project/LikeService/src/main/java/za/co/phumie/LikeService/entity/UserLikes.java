@@ -1,9 +1,11 @@
 package za.co.phumie.LikeService.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity
+@Data
 @Table(name = "likes")
 public class UserLikes {
     @Id

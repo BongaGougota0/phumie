@@ -22,8 +22,9 @@ public class ReactionsImpl implements IReactions {
     @Override
     public String handleFollowReactions(FollowDto followDto) {
 
-        return followDto.userAction() == "FOLLOW" ? userLikesRepo
-                .followUserAction(followDto.userId(), followDto.followerId()) :
-                userLikesRepo.removeFollowing(followDto.userId(), followDto.followerId());
+//        return followDto.userAction() == "FOLLOW" ? userLikesRepo
+//                .followUserAction(followDto.userId(), followDto.followerId()) :
+//                userLikesRepo.removeFollowing(followDto.userId(), followDto.followerId());
+        return "";
     }
 }
