@@ -23,7 +23,7 @@ public class LikesController {
         return ResponseEntity.ok().body(userLikes);
     }
 
-    @PostMapping("")
+    @PostMapping("/like")
     public ResponseEntity<String> likePost(@RequestBody LikeDto likeDto){
         String message = iLikes.likePostByPostId(likeDto);
         return ResponseEntity.ok().body(message);

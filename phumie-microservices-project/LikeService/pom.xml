@@ -12,7 +12,7 @@
 	<artifactId>LikeService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>LikeService</name>
+	<name>Likes-Service</name>
 	<description>Like microservice</description>
 	<url/>
 	<licenses>
