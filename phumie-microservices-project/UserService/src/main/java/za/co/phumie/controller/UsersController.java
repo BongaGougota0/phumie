@@ -38,7 +38,7 @@ public class UsersController {
         return ResponseEntity.ok().body(null);
     }
 
-    @PostMapping("/post")
+    @PostMapping()
     public ResponseEntity<ResponseDto> registerUser(@RequestBody PhumieUserDto phumieUserDto){
         return ResponseEntity.ok().body(usersService.save(phumieUserDto));
     }
