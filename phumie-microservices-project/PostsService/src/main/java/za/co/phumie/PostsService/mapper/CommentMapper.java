@@ -1,9 +1,7 @@
 package za.co.phumie.PostsService.mapper;
 
-import za.co.phumie.PostsService.controller.PostsController;
 import za.co.phumie.PostsService.dto.CommentDto;
 import za.co.phumie.PostsService.model.Comment;
-
 import java.time.LocalDateTime;
 
 public class CommentMapper {

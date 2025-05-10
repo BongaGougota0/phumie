@@ -46,7 +46,7 @@ public class PostsController {
         return ResponseEntity.ok().body(post);
     }
 
-    @PostMapping("/post")
+    @PostMapping("")
     public ResponseEntity<ResponseDto> createPost(@RequestBody Post post) {
         postsServiceImpl.createPost(post);
         ResponseDto responseDto = new ResponseDto();
