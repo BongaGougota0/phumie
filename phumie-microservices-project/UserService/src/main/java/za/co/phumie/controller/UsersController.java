@@ -3,18 +3,23 @@ package za.co.phumie.controller;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import za.co.phumie.dto.AuthenticationDto;
 import za.co.phumie.dto.LoginCredentials;
 import za.co.phumie.dto.PhumieUserDto;
 import za.co.phumie.dto.ResponseDto;
+import za.co.phumie.mapper.UserMapper;
+import za.co.phumie.security.JwtService;
 import za.co.phumie.service.UsersService;
 
 @RestController
 @RequestMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UsersController {
     private final UsersService usersService;
+    private final JwtService jwtService;
 
-    public UsersController(UsersService usersService) {
+    public UsersController(UsersService usersService, JwtService jwtService) {
         this.usersService = usersService;
+        this.jwtService = jwtService;
     }
 
     @GetMapping("/{userId}")
@@ -28,9 +33,16 @@ public class UsersController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginCredentials loginCredentials){
-
-        return ResponseEntity.ok().body(null);
+    public ResponseEntity<AuthenticationDto> login(@RequestBody LoginCredentials loginCredentials){
+        if(usersService.authenticateUser(loginCredentials)){
+            var userDto = new PhumieUserDto(loginCredentials.usernameEmail(),
+                    loginCredentials.usernameEmail(), loginCredentials.password(),"","");
+            var concreteUserDto = usersService.getUserByEmailOrUsername(userDto);
+            String jwtToken = jwtService.generateToken(UserMapper.mapEntityToDto(concreteUserDto));
+            var responseData = new AuthenticationDto(jwtToken, userDto);
+            return ResponseEntity.ok().body(responseData);
+        }
+        return ResponseEntity.badRequest().body(null);
     }
 
     @PostMapping("/logout")

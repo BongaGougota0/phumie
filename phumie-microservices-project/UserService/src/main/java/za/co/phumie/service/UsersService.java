@@ -2,9 +2,12 @@ package za.co.phumie.service;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import za.co.phumie.dto.LoginCredentials;
 import za.co.phumie.dto.PhumieUserDto;
 import za.co.phumie.dto.ResponseDto;
+import za.co.phumie.exception.IncorrectLoginCredentials;
 import za.co.phumie.exception.UserExistsException;
 import za.co.phumie.exception.UserNotFound;
 import za.co.phumie.mapper.UserMapper;
@@ -15,9 +18,11 @@ import java.time.LocalDateTime;
 @Service
 public class UsersService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsersService(UserRepository userRepository) {
+    public UsersService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public ResponseDto save(PhumieUserDto userDto) {
@@ -120,5 +125,19 @@ public class UsersService {
     private boolean isUsernameOrEmailExists(PhumieUserDto userDto) {
         return (userRepository.findPhumieUserByUserEmail(userDto.userEmail()) != null
                 || userRepository.findPhumieUserByUsername(userDto.username()) != null);
+    }
+
+    public boolean authenticateUser(LoginCredentials loginCredentials){
+        PhumieUser user = userRepository.findPhumieUserByUserEmail(loginCredentials.usernameEmail());
+
+        if(user == null){
+            throw new UserNotFound("No user found with the provided email or username");
+        }
+
+        if(passwordEncoder.matches(user.getPassword(), loginCredentials.password())){
+            return true;
+        }else {
+            throw new IncorrectLoginCredentials("Incorrect username or password");
+        }
     }
 }
