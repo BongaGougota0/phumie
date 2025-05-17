@@ -1,0 +1,108 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true  # Optional: Auto-route services by name
+      httpclient:
+        connect-timeout: 2000
+        response-timeout: 5s
+      routes:
+        # Public routes that don't require JWT
+        - id: auth-login
+          uri: lb://user-service
+          predicates:
+            - Path=/api/auth/login
+          filters:
+            - SetPath=/api/auth/login
+
+        - id: auth-signup
+          uri: lb://user-service
+          predicates:
+            - Path=/api/auth/signup
+          filters:
+            - SetPath=/api/auth/signup
+
+        - id: auth-forgot-password
+          uri: lb://user-service
+          predicates:
+            - Path=/api/auth/forgot-password
+          filters:
+            - SetPath=/api/auth/forgot-password
+
+        # Protected routes that require JWT
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+
+        - id: post-service
+          uri: lb://post-service
+          predicates:
+            - Path=/api/posts/**
+
+        - id: feed-service
+          uri: lb://feed-service
+          predicates:
+            - Path=/api/feed/**
+          filters:
+            - name: Retry
+              args:
+                retries: 3
+                statuses: BAD_GATEWAY
+
+        - id: likes-service
+          uri: lb://likes-service
+          predicates:
+            - Path=/api/likes/**
+
+        # Health check endpoint
+        - id: health-check
+          uri: lb://api-gateway
+          predicates:
+            - Path=/api/health
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    hostname: localhost
+    prefer-ip-address: true  # Added for better network resolution
+
+# JWT Configuration
+app:
+  secret-key: "this_is_my_long_secret_key_for_jwt_creation"
+  jwt-valid-duration: 60  # Changed to minutes to match your JwtAuthService
+  jwt-issuer: "phumie-api-service"
+  # Path exclusions for JWT validation
+  jwt:
+    public-paths:
+      - /api/auth/login
+      - /api/auth/signup
+      - /api/auth/forgot-password
+      - /api/health
+      - /actuator/**
+
+# Added logging configuration
+logging:
+  level:
+    reactor.netty: INFO
+    za.co.phumie.gateway.api: DEBUG
+
+# Added management endpoints for monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,gateway
+  endpoint:
+    health:
+      show-details: ALWAYS
