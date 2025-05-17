@@ -38,3 +38,8 @@ eureka:
     register-with-eureka: true
   instance:
     hostname: localhost
+
+app:
+  secret-key: "this_is_my_long_secret_key_for_jwt_creation"
+  jwt-valid-duration : 3600000
+  jwt-issuer: "phumie-api-service"

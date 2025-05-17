@@ -1,5 +1,6 @@
 package za.co.phumie.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +16,9 @@ import za.co.phumie.service.UsersService;
 @RequestMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UsersController {
     private final UsersService usersService;
-    private final JwtService jwtService;
 
     public UsersController(UsersService usersService, JwtService jwtService) {
         this.usersService = usersService;
-        this.jwtService = jwtService;
     }
 
     @GetMapping("/{userId}")
@@ -32,15 +31,28 @@ public class UsersController {
         return ResponseEntity.ok().body(usersService.getUserByUsername(username));
     }
 
+    @PostMapping("/validate")
+    public ResponseEntity<PhumieUserDto> validateCredentials(@RequestBody LoginCredentials loginCredentials) {
+        if(usersService.authenticateUser(loginCredentials)) {
+            var userDto = usersService.getUserByEmailOrUsername(
+                    new PhumieUserDto(loginCredentials.usernameEmail(),
+                            loginCredentials.usernameEmail(), loginCredentials.password(),"","")
+            );
+            return ResponseEntity.ok(UserMapper.mapEntityToDto(userDto));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @Deprecated
     @PostMapping("/login")
     public ResponseEntity<AuthenticationDto> login(@RequestBody LoginCredentials loginCredentials){
         if(usersService.authenticateUser(loginCredentials)){
             var userDto = new PhumieUserDto(loginCredentials.usernameEmail(),
                     loginCredentials.usernameEmail(), loginCredentials.password(),"","");
             var concreteUserDto = usersService.getUserByEmailOrUsername(userDto);
-            String jwtToken = jwtService.generateToken(UserMapper.mapEntityToDto(concreteUserDto));
-            var responseData = new AuthenticationDto(jwtToken, userDto);
-            return ResponseEntity.ok().body(responseData);
+//            String jwtToken = jwtService.generateToken(UserMapper.mapEntityToDto(concreteUserDto));
+//            var responseData = new AuthenticationDto(jwtToken, userDto);
+            return ResponseEntity.ok().body(null);
         }
         return ResponseEntity.badRequest().body(null);
     }
