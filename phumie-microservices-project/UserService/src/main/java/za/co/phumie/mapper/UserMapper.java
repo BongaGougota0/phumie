@@ -8,7 +8,7 @@ public class UserMapper {
 
     public static PhumieUserDto mapEntityToDto(PhumieUser user) {
         PhumieUserDto dto = new PhumieUserDto(user.getUsername(), user.getUserEmail(),
-                "", "", user.getAboutUser());
+                "", user.getUserRole().name(), user.getAboutUser());
         return dto;
     }
 

@@ -2,8 +2,10 @@ package za.co.phumie.service;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import za.co.phumie.dto.AuthenticationDto;
 import za.co.phumie.dto.LoginCredentials;
 import za.co.phumie.dto.PhumieUserDto;
 import za.co.phumie.dto.ResponseDto;
@@ -13,16 +15,20 @@ import za.co.phumie.exception.UserNotFound;
 import za.co.phumie.mapper.UserMapper;
 import za.co.phumie.model.PhumieUser;
 import za.co.phumie.repository.UserRepository;
+import za.co.phumie.security.JwtService;
+
 import java.time.LocalDateTime;
 
 @Service
 public class UsersService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public UsersService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UsersService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public ResponseDto save(PhumieUserDto userDto) {
@@ -30,10 +36,9 @@ public class UsersService {
             throw new UserExistsException(userDto.userEmail()+"/"+userDto.username());
         }
         var newUser = UserMapper.mapDtoToEntity(userDto);
+        newUser.setPassword(passwordEncoder.encode(userDto.password()));
         userRepository.save(newUser);
-        // prepare response
-        ResponseDto responseDto = prepareResponseDto();
-        return responseDto;
+        return prepareResponseDto();
     }
 
     private static ResponseDto prepareResponseDto() {
@@ -117,6 +122,18 @@ public class UsersService {
         }
     }
 
+    public PhumieUser getUserByEmailOrUsername(String email) {
+        if (email == null) {
+            throw new IllegalArgumentException("Email cannot be null");
+        }
+
+        if (email != null && !email.isEmpty() && userRepository.findPhumieUserByUserEmail(email) != null) {
+            return userRepository.findPhumieUserByUserEmail(email);
+        } else {
+            throw new IllegalArgumentException("Email must be provided");
+        }
+    }
+
     public void putPassword(PhumieUserDto dto){
         PhumieUser user = userRepository.getPhumieUserByUserEmail(dto.userEmail());
         userRepository.save(user);
@@ -127,15 +144,17 @@ public class UsersService {
                 || userRepository.findPhumieUserByUsername(userDto.username()) != null);
     }
 
-    public boolean authenticateUser(LoginCredentials loginCredentials){
+    public AuthenticationDto authenticateUser(LoginCredentials loginCredentials){
         PhumieUser user = userRepository.findPhumieUserByUserEmail(loginCredentials.usernameEmail());
-
+        System.out.println("Found user object: " + user.toString());
         if(user == null){
             throw new UserNotFound("No user found with the provided email or username");
         }
 
-        if(passwordEncoder.matches(user.getPassword(), loginCredentials.password())){
-            return true;
+        if(passwordEncoder.matches(loginCredentials.password(), user.getPassword())){
+            var userDto = UserMapper.mapEntityToDto(user);
+            String jwtToken = jwtService.generateToken(userDto);
+            return new AuthenticationDto(jwtToken, userDto);
         }else {
             throw new IncorrectLoginCredentials("Incorrect username or password");
         }

@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8080
 spring:
   application:
     name: user-service
@@ -39,7 +39,7 @@ logging:
     com.example.microservice: DEBUG
 
 app:
-  welcome-message: "Welcome to My Microservice!"
+  welcome-message: "phumie social backend!"
   max-retries: 3
 
   secret-key: "this_is_my_long_secret_key_for_jwt_creation"

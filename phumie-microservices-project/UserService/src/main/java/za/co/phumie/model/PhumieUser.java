@@ -21,4 +21,13 @@ public class PhumieUser {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Follower> followers = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "PhumieUser(userId=" + userId +
+                ", username=" + username +
+                ", userEmail=" + userEmail +
+                ", userRole=" + userRole +
+                ", aboutUser=" + aboutUser + ")";
+    }
 }

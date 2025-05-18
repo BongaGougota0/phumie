@@ -12,8 +12,6 @@ import za.co.phumie.dto.AuthenticationDto;
 import za.co.phumie.dto.LoginCredentials;
 import za.co.phumie.dto.PhumieUserDto;
 import za.co.phumie.dto.ResponseDto;
-import za.co.phumie.exception.IncorrectLoginCredentials;
-import za.co.phumie.mapper.UserMapper;
 import za.co.phumie.security.JwtService;
 import za.co.phumie.service.UsersService;
 
@@ -38,7 +36,7 @@ public class AuthController {
             return webClient
                     .build()
                     .post()
-                    .uri("http://localhost:8080/api/users/login")
+                    .uri("http://localhost:8080/api/auth/login")
                     .bodyValue(new LoginCredentials(newUser.userEmail(), newUser.password()))
                     .retrieve()
                     .bodyToMono(AuthenticationDto.class)
@@ -51,16 +49,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationDto> login(@RequestBody LoginCredentials loginCredentials){
-        if(usersService.authenticateUser(loginCredentials)){
-            var userEmailUsernameObj = new PhumieUserDto(loginCredentials.usernameEmail(),
-                    loginCredentials.usernameEmail(), loginCredentials.password(),"","");
-            var userObject = usersService.getUserByEmailOrUsername(userEmailUsernameObj);
-            var userDto = UserMapper.mapEntityToDto(userObject);
-            String jwtToken = jwtService.generateToken(userDto);
-            var responseData = new AuthenticationDto(jwtToken, userDto);
+            var responseData = usersService.authenticateUser(loginCredentials);
             return ResponseEntity.ok(responseData);
-        } else {
-            throw new IncorrectLoginCredentials("Invalid credentials");
-        }
     }
 }

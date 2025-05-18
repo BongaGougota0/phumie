@@ -4,12 +4,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import za.co.phumie.dto.AuthenticationDto;
 import za.co.phumie.dto.LoginCredentials;
 import za.co.phumie.dto.PhumieUserDto;
 import za.co.phumie.dto.ResponseDto;
+import za.co.phumie.exception.IncorrectLoginCredentials;
+import za.co.phumie.exception.UserNotFound;
 import za.co.phumie.mapper.UserMapper;
-import za.co.phumie.security.JwtService;
 import za.co.phumie.service.UsersService;
 
 @RestController
@@ -17,7 +17,7 @@ import za.co.phumie.service.UsersService;
 public class UsersController {
     private final UsersService usersService;
 
-    public UsersController(UsersService usersService, JwtService jwtService) {
+    public UsersController(UsersService usersService) {
         this.usersService = usersService;
     }
 
@@ -31,38 +31,12 @@ public class UsersController {
         return ResponseEntity.ok().body(usersService.getUserByUsername(username));
     }
 
-    @PostMapping("/validate")
-    public ResponseEntity<PhumieUserDto> validateCredentials(@RequestBody LoginCredentials loginCredentials) {
-        if(usersService.authenticateUser(loginCredentials)) {
-            var userDto = usersService.getUserByEmailOrUsername(
-                    new PhumieUserDto(loginCredentials.usernameEmail(),
-                            loginCredentials.usernameEmail(), loginCredentials.password(),"","")
-            );
-            return ResponseEntity.ok(UserMapper.mapEntityToDto(userDto));
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-
-    @Deprecated
-    @PostMapping("/login")
-    public ResponseEntity<AuthenticationDto> login(@RequestBody LoginCredentials loginCredentials){
-        if(usersService.authenticateUser(loginCredentials)){
-            var userDto = new PhumieUserDto(loginCredentials.usernameEmail(),
-                    loginCredentials.usernameEmail(), loginCredentials.password(),"","");
-            var concreteUserDto = usersService.getUserByEmailOrUsername(userDto);
-//            String jwtToken = jwtService.generateToken(UserMapper.mapEntityToDto(concreteUserDto));
-//            var responseData = new AuthenticationDto(jwtToken, userDto);
-            return ResponseEntity.ok().body(null);
-        }
-        return ResponseEntity.badRequest().body(null);
-    }
-
     @PostMapping("/logout")
     public ResponseEntity<?> logout(){
         return ResponseEntity.ok().body(null);
     }
 
-    @PostMapping()
+    @PostMapping("/signup")
     public ResponseEntity<ResponseDto> registerUser(@RequestBody PhumieUserDto phumieUserDto){
         return ResponseEntity.ok().body(usersService.save(phumieUserDto));
     }
