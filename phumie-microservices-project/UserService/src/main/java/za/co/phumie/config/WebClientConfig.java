@@ -15,6 +15,6 @@ public class WebClientConfig {
                     System.out.println("Outgoing request: " + request.method() + " " + request.url());
                     return next.exchange(request);
                 });
-    }s
+    }
 
 }

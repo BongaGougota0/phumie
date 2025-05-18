@@ -2,7 +2,6 @@ package za.co.phumie.service;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import za.co.phumie.dto.AuthenticationDto;
@@ -16,7 +15,6 @@ import za.co.phumie.mapper.UserMapper;
 import za.co.phumie.model.PhumieUser;
 import za.co.phumie.repository.UserRepository;
 import za.co.phumie.security.JwtService;
-
 import java.time.LocalDateTime;
 
 @Service
@@ -97,10 +95,8 @@ public class UsersService {
         if (userDto == null) {
             throw new IllegalArgumentException("User details cannot be null");
         }
-
         String email = userDto.userEmail();
         String username = userDto.username();
-
         if (email != null && !email.isEmpty() && userRepository.findPhumieUserByUserEmail(email) != null) {
             return userRepository.findPhumieUserByUserEmail(email);
         } else if (username != null && !username.isEmpty() && userRepository.findPhumieUserByUsername(username) != null) {
@@ -126,7 +122,6 @@ public class UsersService {
         if (email == null) {
             throw new IllegalArgumentException("Email cannot be null");
         }
-
         if (email != null && !email.isEmpty() && userRepository.findPhumieUserByUserEmail(email) != null) {
             return userRepository.findPhumieUserByUserEmail(email);
         } else {
@@ -146,16 +141,22 @@ public class UsersService {
 
     public AuthenticationDto authenticateUser(LoginCredentials loginCredentials){
         PhumieUser user = userRepository.findPhumieUserByUserEmail(loginCredentials.usernameEmail());
-        System.out.println("Found user object: " + user.toString());
         if(user == null){
             throw new UserNotFound("No user found with the provided email or username");
         }
-
-        if(passwordEncoder.matches(loginCredentials.password(), user.getPassword())){
-            var userDto = UserMapper.mapEntityToDto(user);
-            String jwtToken = jwtService.generateToken(userDto);
-            return new AuthenticationDto(jwtToken, userDto);
-        }else {
+        boolean passwordMatches = passwordEncoder.matches(loginCredentials.password(), user.getPassword());
+        if(passwordMatches){
+            try {
+                var userDto = UserMapper.mapEntityToDto(user);
+                String jwtToken = jwtService.generateToken(userDto);
+                AuthenticationDto authDto = new AuthenticationDto(jwtToken, userDto);
+                return authDto;
+            } catch (Exception e) {
+                System.err.println("Error during authentication: " + e.getMessage());
+                e.printStackTrace();
+                throw e;
+            }
+        } else {
             throw new IncorrectLoginCredentials("Incorrect username or password");
         }
     }

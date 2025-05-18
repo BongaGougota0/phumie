@@ -1,15 +1,10 @@
 package za.co.phumie.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import za.co.phumie.dto.LoginCredentials;
 import za.co.phumie.dto.PhumieUserDto;
 import za.co.phumie.dto.ResponseDto;
-import za.co.phumie.exception.IncorrectLoginCredentials;
-import za.co.phumie.exception.UserNotFound;
-import za.co.phumie.mapper.UserMapper;
 import za.co.phumie.service.UsersService;
 
 @RestController
@@ -34,11 +29,6 @@ public class UsersController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(){
         return ResponseEntity.ok().body(null);
-    }
-
-    @PostMapping("/signup")
-    public ResponseEntity<ResponseDto> registerUser(@RequestBody PhumieUserDto phumieUserDto){
-        return ResponseEntity.ok().body(usersService.save(phumieUserDto));
     }
 
     @PutMapping("/update")
