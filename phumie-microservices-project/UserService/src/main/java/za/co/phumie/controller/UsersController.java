@@ -5,25 +5,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.co.phumie.dto.PhumieUserDto;
 import za.co.phumie.dto.ResponseDto;
-import za.co.phumie.service.UsersService;
+import za.co.phumie.service.UsersServiceImpl;
 
 @RestController
 @RequestMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UsersController {
-    private final UsersService usersService;
+    private final UsersServiceImpl usersServiceImpl;
 
-    public UsersController(UsersService usersService) {
-        this.usersService = usersService;
+    public UsersController(UsersServiceImpl usersServiceImpl) {
+        this.usersServiceImpl = usersServiceImpl;
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<PhumieUserDto> getUserById(@PathVariable Long userId){
-        return ResponseEntity.ok().body(usersService.getUserById(userId));
+    @GetMapping()
+    public ResponseEntity<PhumieUserDto> getUserById(@RequestParam("userId") Long userId){
+        return ResponseEntity.ok().body(usersServiceImpl.getUserById(userId));
     }
 
-    @GetMapping("/get")
+    @GetMapping()
     public ResponseEntity<Long> getUserIdByUsername(@RequestParam("username") String username){
-        return ResponseEntity.ok().body(usersService.getUserByUsername(username));
+        return ResponseEntity.ok().body(usersServiceImpl.getUserByUsername(username));
     }
 
     @PostMapping("/logout")
@@ -33,13 +33,13 @@ public class UsersController {
 
     @PutMapping("/update")
     public ResponseEntity<ResponseDto> updateUser(@RequestBody PhumieUserDto phumieUserDto){
-        return ResponseEntity.ok().body(usersService.putUserDetails(phumieUserDto));
+        return ResponseEntity.ok().body(usersServiceImpl.putUserDetails(phumieUserDto));
     }
 
-    @PutMapping("/update-username/{oldUsername}")
-    public ResponseEntity<ResponseDto> updateUserName(@PathVariable String oldUsername,
+    @PutMapping()
+    public ResponseEntity<ResponseDto> updateUserName(@RequestParam("oldUsername") String oldUsername,
                                                       @RequestBody PhumieUserDto phumieUserDto){
-        boolean isUpdated = usersService.putUsername(oldUsername, phumieUserDto);
+        boolean isUpdated = usersServiceImpl.putUsername(oldUsername, phumieUserDto);
         if(isUpdated){
             var response = new ResponseDto();
             response.setMessage("username updated");
@@ -51,7 +51,7 @@ public class UsersController {
 
     @PutMapping("/change-password")
     public ResponseEntity<ResponseDto> changeUserPassword(@RequestBody PhumieUserDto phumieUserDto){
-        usersService.putPassword(phumieUserDto);
+        usersServiceImpl.putPassword(phumieUserDto);
         var response = new ResponseDto();
         response.setMessage("Password updated");
         return ResponseEntity.ok().body(response);

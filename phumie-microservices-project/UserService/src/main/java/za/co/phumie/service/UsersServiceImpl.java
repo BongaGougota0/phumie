@@ -18,12 +18,12 @@ import za.co.phumie.security.JwtService;
 import java.time.LocalDateTime;
 
 @Service
-public class UsersService {
+public class UsersServiceImpl {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public UsersService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
+    public UsersServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;

@@ -12,25 +12,25 @@ import za.co.phumie.dto.AuthenticationDto;
 import za.co.phumie.dto.LoginCredentials;
 import za.co.phumie.dto.PhumieUserDto;
 import za.co.phumie.dto.ResponseDto;
-import za.co.phumie.service.UsersService;
+import za.co.phumie.service.UsersServiceImpl;
 
 @RestController
 @RequestMapping(value = "/api/auth")
 public class AuthController {
 
     private final WebClient.Builder webClient;
-    private final UsersService usersService;
+    private final UsersServiceImpl usersServiceImpl;
 
-    public AuthController(WebClient.Builder webClientConfig, UsersService usersService) {
+    public AuthController(WebClient.Builder webClientConfig, UsersServiceImpl usersServiceImpl) {
         this.webClient = webClientConfig;
-        this.usersService = usersService;
+        this.usersServiceImpl = usersServiceImpl;
     }
 
     // Signup user and login user.
     // In case of existing username or email. Application throws error 409 Conflict.
     @PostMapping(value = "/signup")
     public Mono<ResponseEntity<AuthenticationDto>> signup(@RequestBody PhumieUserDto newUser) {
-        ResponseDto resp = usersService.save(newUser);
+        ResponseDto resp = usersServiceImpl.save(newUser);
         if(resp.getMessage().equalsIgnoreCase("Success")){
             return webClient
                     .build()
@@ -48,7 +48,7 @@ public class AuthController {
 
     @PostMapping(value = "/login")
     public ResponseEntity<AuthenticationDto> login(@RequestBody LoginCredentials loginCredentials){
-            var responseData = usersService.authenticateUser(loginCredentials);
+            var responseData = usersServiceImpl.authenticateUser(loginCredentials);
             return ResponseEntity.ok(responseData);
     }
 }
