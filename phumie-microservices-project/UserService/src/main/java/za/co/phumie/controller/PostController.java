@@ -2,13 +2,14 @@ package za.co.phumie.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import za.co.phumie.service.PostServiceImpl;
 
 @RestController
 @RequestMapping(value = "/api/post")
 public class PostController {
-    private final PostService postService;
+    private final PostServiceImpl postService;
 
-    public PostController(PostService postService){
+    public PostController(PostServiceImpl postService){
         this.postService = postService;
     }
 }

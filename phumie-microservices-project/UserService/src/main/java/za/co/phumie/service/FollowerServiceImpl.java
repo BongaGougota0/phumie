@@ -1,5 +1,6 @@
 package za.co.phumie.service;
 
+import org.springframework.stereotype.Service;
 import za.co.phumie.dto.FollowerDto;
 import za.co.phumie.model.Follower;
 import za.co.phumie.repository.FollowerRepository;
@@ -7,6 +8,7 @@ import za.co.phumie.service.usersint.IFollower;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class FollowerServiceImpl implements IFollower {
 
     private final FollowerRepository followerRepository;

@@ -16,8 +16,8 @@ public class UsersController {
         this.usersServiceImpl = usersServiceImpl;
     }
 
-    @GetMapping()
-    public ResponseEntity<PhumieUserDto> getUserById(@RequestParam("userId") Long userId){
+    @GetMapping("/{userId}")
+    public ResponseEntity<PhumieUserDto> getUserById(@PathVariable("userId") Long userId){
         return ResponseEntity.ok().body(usersServiceImpl.getUserById(userId));
     }
 
