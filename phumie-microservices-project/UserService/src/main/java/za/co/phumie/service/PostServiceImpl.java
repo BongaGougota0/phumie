@@ -61,13 +61,11 @@ public class PostServiceImpl implements IPost {
     }
 
     @Override
-    public void createPost(Post post) {
+    public void createPost(PostDto post) {
         if(post == null){
             throw new EmptyUsernamePostException(INVALID_POST_REQUEST);
         }
-//        post.setAuthorUserId(PostController.transformUsernameToAuthorId(post.getAuthorUsername()));
-        post.setTimeStamp(LocalDateTime.now());
-        postsRepository.save(post);
+        postsRepository.save(PostMapper.mapDtoToEntity(post));
     }
 
     @Override

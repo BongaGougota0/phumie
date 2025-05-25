@@ -7,8 +7,11 @@ import za.co.phumie.model.UserRole;
 public class UserMapper {
 
     public static PhumieUserDto mapEntityToDto(PhumieUser user) {
-        PhumieUserDto dto = new PhumieUserDto(user.getUsername(), user.getUserEmail(),
-                "", user.getUserRole().name(), user.getAboutUser());
+        PhumieUserDto dto = new PhumieUserDto(user.getUserId(),
+                user.getUsername(),
+                user.getUserEmail(),
+                "", user.getUserRole().name(),
+                user.getAboutUser());
         return dto;
     }
 

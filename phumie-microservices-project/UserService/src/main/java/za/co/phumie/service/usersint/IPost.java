@@ -31,7 +31,7 @@ public interface IPost {
      *
      * @param post POJO write to db
      */
-    void createPost(Post post);
+    void createPost(PostDto post);
 
 
     /**
