@@ -25,6 +25,7 @@ public class JwtService {
 
     public String generateToken(PhumieUserDto userDto) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", userDto.userId());
         claims.put("username", userDto.username());
         claims.put("userEmail", userDto.userEmail());
         claims.put("userRole", userDto.userRole());
