@@ -45,5 +45,5 @@ app:
   max-retries: 3
 
   secret-key: "this-is-my-long-secret-key-for-jwt-creation"
-  jwt-valid-duration : 3600000
+  jwt-valid-duration : 86400000
   jwt-issuer: "phumie-auth-service"

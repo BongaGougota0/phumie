@@ -5,7 +5,8 @@ import za.co.phumie.model.Post;
 
 public class PostMapper {
     public static PostDto mapEntityToDto(Post entity) {
-        PostDto dto = new PostDto(entity.getPostId(), entity.getAuthorUserId(), entity.getPostContent(), entity.getAuthorUsername(), entity.getTimeStamp());
+        PostDto dto = new PostDto(entity.getPostId(), entity.getAuthorUserId(),
+                entity.getPostContent(), entity.getAuthorUsername(), entity.getTimeStamp());
         return dto;
     }
 

@@ -7,6 +7,7 @@ import za.co.phumie.dto.PostDto;
 import za.co.phumie.dto.ResponseDto;
 import za.co.phumie.service.PostServiceImpl;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/post")
@@ -31,5 +32,11 @@ public class PostController {
     public ResponseEntity<PostDto> getPost(@PathVariable Long postId){
         var post = postService.getPostById(postId);
         return new ResponseEntity<>(post, HttpStatus.OK);
+    }
+
+    @GetMapping("/public")
+    public ResponseEntity<List<PostDto>> getPublicPost() {
+        var posts = postService.getRandomPostsForWelcomeScreen();
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 }
