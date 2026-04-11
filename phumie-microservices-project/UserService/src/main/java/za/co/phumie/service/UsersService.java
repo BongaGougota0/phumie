@@ -30,6 +30,7 @@ public class UsersService {
             throw new UserExistsException(userDto.userEmail()+"/"+userDto.username());
         }
         var newUser = UserMapper.mapDtoToEntity(userDto);
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         userRepository.save(newUser);
         // prepare response
         ResponseDto responseDto = prepareResponseDto();
@@ -134,7 +135,7 @@ public class UsersService {
             throw new UserNotFound("No user found with the provided email or username");
         }
 
-        if(passwordEncoder.matches(user.getPassword(), loginCredentials.password())){
+        if(passwordEncoder.matches(loginCredentials.password(), user.getPassword())){
             return true;
         }else {
             throw new IncorrectLoginCredentials("Incorrect username or password");
