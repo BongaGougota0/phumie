@@ -79,7 +79,7 @@ eureka:
 
 # JWT Configuration
 app:
-  secret-key: "this_is_my_long_secret_key_for_jwt_creation"
+  secret-key: "this-is-my-long-secret-key-for-jwt-creation"
   jwt-valid-duration: 60  # Changed to minutes to match your JwtAuthService
   jwt-issuer: "phumie-api-service"
   # Path exclusions for JWT validation
@@ -89,6 +89,7 @@ app:
       - /api/auth/signup
       - /api/auth/forgot-password
       - /api/health
+      - /api/posts/public
       - /actuator/**
 
 # Added logging configuration

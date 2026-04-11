@@ -2,10 +2,13 @@ package za.co.phumie.gateway.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import za.co.phumie.gateway.api.config.JwtProperties;
 
 @SpringBootApplication
 @EnableDiscoveryClient
+@EnableConfigurationProperties(JwtProperties.class)
 public class ApiApplication {
 
 	public static void main(String[] args) {

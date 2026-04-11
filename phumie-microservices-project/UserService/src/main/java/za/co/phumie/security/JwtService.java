@@ -39,7 +39,9 @@ public class JwtService {
     }
 
     private SecretKey generateSecretKey() {
-        byte[] decodedKey = Base64.getDecoder().decode(SECRET_KEY);
+//        byte[] decodedKey = Base64.getDecoder().decode(SECRET_KEY);
+//        standard decoder rejects _ and -, hence change to urlDecoder(...)
+        byte[] decodedKey = Base64.getUrlDecoder().decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(decodedKey);
     }
 

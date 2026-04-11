@@ -16,7 +16,6 @@ import za.co.phumie.service.UsersService;
 
 @RestController
 @RequestMapping(value = "/api/auth")
-@CrossOrigin(value = "*")
 public class AuthController {
 
     private final WebClient.Builder webClient;
@@ -36,7 +35,7 @@ public class AuthController {
             return webClient
                     .build()
                     .post()
-                    .uri("http://localhost:8080/api/users/login")
+                    .uri("http://localhost:8080/api/auth/login")
                     .bodyValue(new LoginCredentials(newUser.userEmail(), newUser.password()))
                     .retrieve()
                     .bodyToMono(AuthenticationDto.class)
