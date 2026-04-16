@@ -9,28 +9,25 @@ import za.co.phumie.dto.AuthenticationDto;
 import za.co.phumie.dto.LoginCredentials;
 import za.co.phumie.dto.PhumieUserDto;
 import za.co.phumie.dto.ResponseDto;
-import za.co.phumie.exception.IncorrectLoginCredentials;
-import za.co.phumie.mapper.UserMapper;
-import za.co.phumie.security.JwtService;
-import za.co.phumie.service.UsersService;
+import za.co.phumie.service.UsersServiceImpl;
 
 @RestController
 @RequestMapping(value = "/api/auth")
 public class AuthController {
 
     private final WebClient.Builder webClient;
-    private final JwtService jwtService;
-    private final UsersService usersService;
+    private final UsersServiceImpl usersServiceImpl;
 
-    public AuthController(WebClient.Builder webClientConfig, JwtService jwtService, UsersService usersService) {
+    public AuthController(WebClient.Builder webClientConfig, UsersServiceImpl usersServiceImpl) {
         this.webClient = webClientConfig;
-        this.jwtService = jwtService;
-        this.usersService = usersService;
+        this.usersServiceImpl = usersServiceImpl;
     }
 
-    @PostMapping("/signup")
+    // Signup user and login user.
+    // In case of existing username or email. Application throws error 409 Conflict.
+    @PostMapping(value = "/signup")
     public Mono<ResponseEntity<AuthenticationDto>> signup(@RequestBody PhumieUserDto newUser) {
-        ResponseDto resp = usersService.save(newUser);
+        ResponseDto resp = usersServiceImpl.save(newUser);
         if(resp.getMessage().equalsIgnoreCase("Success")){
             return webClient
                     .build()
@@ -46,18 +43,9 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login")
     public ResponseEntity<AuthenticationDto> login(@RequestBody LoginCredentials loginCredentials){
-        if(usersService.authenticateUser(loginCredentials)){
-            var userEmailUsernameObj = new PhumieUserDto(loginCredentials.usernameEmail(),
-                    loginCredentials.usernameEmail(), loginCredentials.password(),"","");
-            var userObject = usersService.getUserByEmailOrUsername(userEmailUsernameObj);
-            var userDto = UserMapper.mapEntityToDto(userObject);
-            String jwtToken = jwtService.generateToken(userDto);
-            var responseData = new AuthenticationDto(jwtToken, userDto);
+            var responseData = usersServiceImpl.authenticateUser(loginCredentials);
             return ResponseEntity.ok(responseData);
-        } else {
-            throw new IncorrectLoginCredentials("Invalid credentials");
-        }
     }
 }

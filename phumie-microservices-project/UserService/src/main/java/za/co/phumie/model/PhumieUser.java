@@ -3,6 +3,7 @@ package za.co.phumie.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,5 +21,15 @@ public class PhumieUser {
     private String aboutUser;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<Follower> followers = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "PhumieUser(userId=" + userId +
+                ", username=" + username +
+                ", userEmail=" + userEmail +
+                ", userRole=" + userRole +
+                ", aboutUser=" + aboutUser + ")";
+    }
 }
