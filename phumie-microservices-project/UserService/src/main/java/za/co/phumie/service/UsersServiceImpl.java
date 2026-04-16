@@ -4,7 +4,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import za.co.phumie.dto.AuthenticationDto;
 import za.co.phumie.dto.LoginCredentials;
 import za.co.phumie.dto.PhumieUserDto;
 import za.co.phumie.dto.ResponseDto;
@@ -14,19 +13,16 @@ import za.co.phumie.exception.UserNotFound;
 import za.co.phumie.mapper.UserMapper;
 import za.co.phumie.model.PhumieUser;
 import za.co.phumie.repository.UserRepository;
-import za.co.phumie.security.JwtService;
 import java.time.LocalDateTime;
 
 @Service
-public class UsersServiceImpl {
+public class UsersService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
 
-    public UsersServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
+    public UsersService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtService = jwtService;
     }
 
     public ResponseDto save(PhumieUserDto userDto) {
@@ -34,9 +30,11 @@ public class UsersServiceImpl {
             throw new UserExistsException(userDto.userEmail()+"/"+userDto.username());
         }
         var newUser = UserMapper.mapDtoToEntity(userDto);
-        newUser.setPassword(passwordEncoder.encode(userDto.password()));
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         userRepository.save(newUser);
-        return prepareResponseDto();
+        // prepare response
+        ResponseDto responseDto = prepareResponseDto();
+        return responseDto;
     }
 
     private static ResponseDto prepareResponseDto() {
@@ -95,8 +93,10 @@ public class UsersServiceImpl {
         if (userDto == null) {
             throw new IllegalArgumentException("User details cannot be null");
         }
+
         String email = userDto.userEmail();
         String username = userDto.username();
+
         if (email != null && !email.isEmpty() && userRepository.findPhumieUserByUserEmail(email) != null) {
             return userRepository.findPhumieUserByUserEmail(email);
         } else if (username != null && !username.isEmpty() && userRepository.findPhumieUserByUsername(username) != null) {
@@ -118,17 +118,6 @@ public class UsersServiceImpl {
         }
     }
 
-    public PhumieUser getUserByEmailOrUsername(String email) {
-        if (email == null) {
-            throw new IllegalArgumentException("Email cannot be null");
-        }
-        if (email != null && !email.isEmpty() && userRepository.findPhumieUserByUserEmail(email) != null) {
-            return userRepository.findPhumieUserByUserEmail(email);
-        } else {
-            throw new IllegalArgumentException("Email must be provided");
-        }
-    }
-
     public void putPassword(PhumieUserDto dto){
         PhumieUser user = userRepository.getPhumieUserByUserEmail(dto.userEmail());
         userRepository.save(user);
@@ -139,24 +128,16 @@ public class UsersServiceImpl {
                 || userRepository.findPhumieUserByUsername(userDto.username()) != null);
     }
 
-    public AuthenticationDto authenticateUser(LoginCredentials loginCredentials){
+    public boolean authenticateUser(LoginCredentials loginCredentials){
         PhumieUser user = userRepository.findPhumieUserByUserEmail(loginCredentials.usernameEmail());
+
         if(user == null){
             throw new UserNotFound("No user found with the provided email or username");
         }
-        boolean passwordMatches = passwordEncoder.matches(loginCredentials.password(), user.getPassword());
-        if(passwordMatches){
-            try {
-                var userDto = UserMapper.mapEntityToDto(user);
-                String jwtToken = jwtService.generateToken(userDto);
-                AuthenticationDto authDto = new AuthenticationDto(jwtToken, userDto);
-                return authDto;
-            } catch (Exception e) {
-                System.err.println("Error during authentication: " + e.getMessage());
-                e.printStackTrace();
-                throw e;
-            }
-        } else {
+
+        if(passwordEncoder.matches(loginCredentials.password(), user.getPassword())){
+            return true;
+        }else {
             throw new IncorrectLoginCredentials("Incorrect username or password");
         }
     }

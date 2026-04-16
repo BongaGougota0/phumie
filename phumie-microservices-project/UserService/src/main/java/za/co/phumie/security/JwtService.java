@@ -1,44 +1,66 @@
 package za.co.phumie.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import za.co.phumie.config.JwtConfig;
 import za.co.phumie.dto.PhumieUserDto;
-import java.security.Key;
+import javax.crypto.SecretKey;
+import java.time.Instant;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class JwtService {
 
-    private final Key signingKey;
-    private final long validDuration;
-    private final String issuer;
+    @Value("${app.secret-key}")
+    private String SECRET_KEY;
 
-    public JwtService(JwtConfig jwtConfig) {
-        this.signingKey = jwtConfig.signingKey();
-        this.validDuration = jwtConfig.getJwtValidDuration();
-        this.issuer = jwtConfig.getJwtIssuer();
-    }
+    @Value("${app.jwt-valid-duration}")
+    public long VALIDITY_PERIOD;
 
-    public String generateToken(PhumieUserDto userDto) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", userDto.userId());
-        claims.put("username", userDto.username());
-        claims.put("userEmail", userDto.userEmail());
-        claims.put("userRole", userDto.userRole());
+    @Value("${app.jwt-issuer}")
+    public String JWT_ISSUER;
 
+    public String generateToken(PhumieUserDto user) {
+        Map<String, String> claims = new HashMap<>();
+        claims.put("issuer", JWT_ISSUER);
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(userDto.userEmail())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + validDuration))
-                .setIssuer(issuer)
-                .signWith(signingKey, SignatureAlgorithm.HS256)
+                .setSubject(user.userEmail())
+                .setIssuedAt(Date.from(Instant.now()))
+                .setExpiration(Date.from(Instant.now().plusMillis(TimeUnit.MINUTES.toMillis(VALIDITY_PERIOD))))
+                .signWith(generateSecretKey())
                 .compact();
     }
 
+    private SecretKey generateSecretKey() {
+//        byte[] decodedKey = Base64.getDecoder().decode(SECRET_KEY);
+//        standard decoder rejects _ and -, hence change to urlDecoder(...)
+        byte[] decodedKey = Base64.getUrlDecoder().decode(SECRET_KEY);
+        return Keys.hmacShaKeyFor(decodedKey);
+    }
+
+    public String extractUserEmail(String token) {
+        return getClaims(token).getSubject();
+    }
+
+    private Claims getClaims(String token) {
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(generateSecretKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    private boolean isTokenValid(String token) {
+        Claims claims = getClaims(token);
+        return claims.getExpiration().after(Date.from(Instant.now()));
+    }
 
 }

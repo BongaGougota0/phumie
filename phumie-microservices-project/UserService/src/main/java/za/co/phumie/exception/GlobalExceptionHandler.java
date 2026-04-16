@@ -26,9 +26,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ResponseDto> illegalArgument(String message){
+    public ResponseEntity<ResponseDto> illegalArgument(IllegalArgumentException message){
         ResponseDto responseDto = new ResponseDto();
-        responseDto.setMessage(String.format(USER_EXISTS_EXCEPTION,message));
+        responseDto.setMessage(String.format(USER_EXISTS_EXCEPTION,message.getMessage()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
     }
 }
