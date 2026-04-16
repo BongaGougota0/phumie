@@ -6,6 +6,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 import za.co.likesService.LikeAPI.dto.LikeDTO;
 import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -22,15 +23,16 @@ public abstract class LikesService {
         this.sink.asFlux()
                 .buffer(Duration.ofSeconds(10))
                 .map(like -> like.stream().collect(Collectors.groupingBy(
-                        LikeDTO::getPostId, Collectors.counting()
+                        LikeDTO::getPostId
                 )))
                 .flatMap(this::writeLikes)
                 .then();
     }
 
-    private Mono<Void> writeLikes(Map<Integer, Long> likes) {
+    private Mono<Void> writeLikes(Map<Integer, List<LikeDTO>> likes) {
         return Flux
                 .fromIterable(likes.entrySet())
+                // include some method that will persist likes to db while also incrementing postLike count.
                 .then();
     }
 
