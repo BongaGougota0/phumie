@@ -6,7 +6,9 @@ import za.co.phumie.PostsService.model.Post;
 
 public class PostMapper {
     public static PostDto mapEntityToDto(Post entity) {
-        PostDto dto = new PostDto(entity.getPostId(), entity.getPostContent(), entity.getAuthorUsername(), entity.getTimeStamp());
+        PostDto dto = new PostDto(entity.getPostId(), entity.getPostContent(),
+                entity.getAuthorUsername(), entity.getTimeStamp(),
+                entity.getLikeCount(), entity.getRepostCount());
         return dto;
     }
 
@@ -16,6 +18,8 @@ public class PostMapper {
         entity.setAuthorUserId(PostsController.transformUsernameToAuthorId(dto.postAuthor()));
         entity.setPostContent(dto.postContent());
         entity.setTimeStamp(dto.postDate());
+        entity.setRepostCount(0L);
+        entity.setLikeCount(0L);
         return entity;
     }
 }

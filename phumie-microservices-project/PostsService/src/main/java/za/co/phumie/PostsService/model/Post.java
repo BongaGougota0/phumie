@@ -18,6 +18,10 @@ public class Post {
     private Long authorUserId;
     private String authorUsername;
 
+    private Long likeCount;
+    private Long repostCount;
+    private boolean likedByMe;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 }
