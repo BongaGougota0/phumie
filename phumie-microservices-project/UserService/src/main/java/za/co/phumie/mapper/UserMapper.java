@@ -20,7 +20,7 @@ public class UserMapper {
         user.setUserEmail(dto.userEmail());
         user.setAboutUser(dto.aboutUser());
         user.setUsername(dto.username());
-        user.setPassword(dto.password());
+        user.setPasswordHash(dto.password());
         user.setUserRole(UserRole.USER);
         return user;
     }

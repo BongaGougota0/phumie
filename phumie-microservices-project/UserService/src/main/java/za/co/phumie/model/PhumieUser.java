@@ -1,35 +1,41 @@
 package za.co.phumie.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
+import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Entity
-@NoArgsConstructor
-@Table(name = "users")
+@Table(name = "phumie_users")
 public class PhumieUser {
-    @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
+
+    @Column(unique = true, nullable = false)
     private String username;
+
+    @Column(unique = true, nullable = false)
     private String userEmail;
-    private String password;
+
+    private String passwordHash;
     private UserRole userRole;
     private String aboutUser;
+    private String avatarUrl;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private List<Follower> followers = new ArrayList<>();
+    // Denormalized counts — avoids COUNT(*) joins on every profile load
+    @Column(nullable = false)
+    private int followerCount = 0;
 
-    @Override
-    public String toString() {
-        return "PhumieUser(userId=" + userId +
-                ", username=" + username +
-                ", userEmail=" + userEmail +
-                ", userRole=" + userRole +
-                ", aboutUser=" + aboutUser + ")";
-    }
+    @Column(nullable = false)
+    private int followingCount = 0;
+
+    @Column(nullable = false)
+    private boolean isActive = true;
+
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() { this.createdAt = LocalDateTime.now(); }
 }

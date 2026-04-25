@@ -16,11 +16,11 @@ import za.co.phumie.repository.UserRepository;
 import java.time.LocalDateTime;
 
 @Service
-public class UsersService {
+public class UsersServiceImpl {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UsersService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UsersServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -30,7 +30,7 @@ public class UsersService {
             throw new UserExistsException(userDto.userEmail()+"/"+userDto.username());
         }
         var newUser = UserMapper.mapDtoToEntity(userDto);
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        newUser.setPasswordHash(passwordEncoder.encode(userDto.password()));
         userRepository.save(newUser);
         // prepare response
         ResponseDto responseDto = prepareResponseDto();
@@ -135,7 +135,7 @@ public class UsersService {
             throw new UserNotFound("No user found with the provided email or username");
         }
 
-        if(passwordEncoder.matches(loginCredentials.password(), user.getPassword())){
+        if(passwordEncoder.matches(loginCredentials.password(), user.getPasswordHash())){
             return true;
         }else {
             throw new IncorrectLoginCredentials("Incorrect username or password");
