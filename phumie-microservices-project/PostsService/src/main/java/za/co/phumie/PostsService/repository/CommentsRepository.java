@@ -1,9 +1,9 @@
 package za.co.phumie.PostsService.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.stereotype.Repository;
 import za.phumie.shared.appmodels.Comment;
 
 @Repository
-public interface CommentsRepository extends JpaRepository<Comment, Long> {
+public interface CommentsRepository extends R2dbcRepository<Comment, Long> {
 }

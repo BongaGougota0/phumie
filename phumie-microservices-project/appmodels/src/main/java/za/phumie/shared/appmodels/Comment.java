@@ -10,7 +10,6 @@ import java.util.List;
 
 @Setter
 @Getter
-@Entity
 @Table(name = "comments",
         indexes = {
                 @Index(name = "idx_comment_post", columnList = "post_id"),

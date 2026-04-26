@@ -4,16 +4,20 @@ server:
 spring:
   application:
     name: post-service
-  datasource:
-    url: jdbc:mysql://localhost:3306/phumie_project
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/phumie_project
     username: root
     password: "@ZXCp0001"
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:
-      maximum-pool-size: 10
-      minimum-idle: 2
-      idle-timeout: 30000
-      max-lifetime: 1800000
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    hikari:
+#      maximum-pool-size: 10
+#      minimum-idle: 2
+#      idle-timeout: 30000
+#      max-lifetime: 1800000
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:

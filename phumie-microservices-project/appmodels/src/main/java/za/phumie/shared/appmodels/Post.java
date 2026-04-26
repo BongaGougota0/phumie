@@ -9,7 +9,6 @@ import java.util.List;
 
 
 @Data
-@Entity
 @Table(name = "posts",
         indexes = {
                 @Index(name = "idx_post_author", columnList = "author_user_id"),

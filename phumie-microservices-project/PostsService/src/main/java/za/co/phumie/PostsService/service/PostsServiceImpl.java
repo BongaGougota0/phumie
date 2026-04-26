@@ -19,6 +19,7 @@ import za.phumie.shared.appdtos.PostDto;
 import za.phumie.shared.appmodels.Post;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,28 +39,25 @@ public class PostsServiceImpl implements IPosts {
 
     @Cacheable(value = "postEntitiesCache", key = "#postId")
     public Post getPostObjectById(long postId){
-        return postsRepository.findPostByPostId(postId);
+        return postsRepository.findById(postId).block();
     }
 
     public List<PostDto> getRandomPostsForWelcomeScreen() {
-        return postsRepository.findAll().stream().limit(5)
-                .map(PostMapper::mapEntityToDto).collect(Collectors.toList());
+        return new ArrayList<>();
     }
 
     @Override
     public PostDto getPostById(long postId) {
-        Post entity = postsRepository.getPostByPostId(postId).orElseThrow(
-                () -> new PostNotFound(String.format(POST_NOT_FOUND, postId))
-        );
+        Post entity = postsRepository.findById(postId).block();
         return PostMapper.mapEntityToDto(entity);
     }
 
     @Override
     public List<CommentDto> getPostComments(long postId) {
-        List<CommentDto> allComments = commentsRepository
-                .findAllById(Collections.singleton(postId))
-                .stream().map(CommentMapper::toDto).collect(Collectors.toList());
-        return allComments;
+//        List<CommentDto> allComments = commentsRepository
+//                .findAllById(Collections.singleton(postId))
+//                .stream().map(CommentMapper::toDto).collect(Collectors.toList());
+        return new ArrayList<>();
     }
 
     @Override
@@ -75,6 +73,6 @@ public class PostsServiceImpl implements IPosts {
     @Override
     public Page<Post> getUserPostsByUsernameOrId(long authorId, int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber, 10, Sort.by("time_stamp").descending());
-        return postsRepository.getPostByAuthorUserId(authorId, pageable);
+        return null;
     }
 }
