@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import za.co.phumie.dto.CommentDto;
-import za.co.phumie.dto.ResponseDto;
-import za.co.phumie.model.Comment;
+import za.phumie.shared.appdtos.CommentDto;
+import za.phumie.shared.appdtos.ResponseDto;
+import za.phumie.shared.appmodels.Comment;
 import za.co.phumie.service.CommentServiceImpl;
 import java.util.List;
 

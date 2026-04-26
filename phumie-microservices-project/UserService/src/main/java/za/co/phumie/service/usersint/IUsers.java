@@ -1,7 +1,7 @@
 package za.co.phumie.service.usersint;
 
-import za.co.phumie.dto.PhumieUserDto;
-import za.co.phumie.model.PhumieUser;
+import za.phumie.shared.appdtos.PhumieUserDto;
+import za.phumie.shared.appmodels.PhumieUser;
 
 public interface IUsers {
     public PhumieUser getUserByEmail(String email);

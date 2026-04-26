@@ -1,0 +1,10 @@
+/home/man-gee/Documents/Java/phumie/phumie-microservices-project/api/src/main/java/za/co/phumie/gateway/api/config/WebClientConfig.java
+/home/man-gee/Documents/Java/phumie/phumie-microservices-project/api/src/main/java/za/co/phumie/gateway/api/dto/AuthResponse.java
+/home/man-gee/Documents/Java/phumie/phumie-microservices-project/api/src/main/java/za/co/phumie/gateway/api/dto/LoginCredentials.java
+/home/man-gee/Documents/Java/phumie/phumie-microservices-project/api/src/main/java/za/co/phumie/gateway/api/config/SecurityConfig.java
+/home/man-gee/Documents/Java/phumie/phumie-microservices-project/api/src/main/java/za/co/phumie/gateway/api/service/JwtAuthService.java
+/home/man-gee/Documents/Java/phumie/phumie-microservices-project/api/src/main/java/za/co/phumie/gateway/api/dto/ResponseDto.java
+/home/man-gee/Documents/Java/phumie/phumie-microservices-project/api/src/main/java/za/co/phumie/gateway/api/config/JwtProperties.java
+/home/man-gee/Documents/Java/phumie/phumie-microservices-project/api/src/main/java/za/co/phumie/gateway/api/ApiApplication.java
+/home/man-gee/Documents/Java/phumie/phumie-microservices-project/api/src/main/java/za/co/phumie/gateway/api/service/JwtAuthenticationFilter.java
+/home/man-gee/Documents/Java/phumie/phumie-microservices-project/api/src/main/java/za/co/phumie/gateway/api/models/PhumieUserDto.java

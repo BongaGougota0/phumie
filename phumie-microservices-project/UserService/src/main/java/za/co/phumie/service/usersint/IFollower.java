@@ -1,7 +1,7 @@
 package za.co.phumie.service.usersint;
 
-import za.co.phumie.dto.FollowerDto;
-import za.co.phumie.model.Follower;
+import za.phumie.shared.appdtos.FollowerDto;
+import za.phumie.shared.appmodels.Follower;
 import java.util.List;
 import java.util.Map;
 

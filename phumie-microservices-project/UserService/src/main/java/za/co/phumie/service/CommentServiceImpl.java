@@ -2,10 +2,10 @@ package za.co.phumie.service;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import za.co.phumie.dto.CommentDto;
-import za.co.phumie.dto.ResponseDto;
+import za.phumie.shared.appdtos.CommentDto;
+import za.phumie.shared.appdtos.ResponseDto;
 import za.co.phumie.mapper.CommentMapper;
-import za.co.phumie.model.Comment;
+import za.phumie.shared.appmodels.Comment;
 import za.co.phumie.repository.CommentRepository;
 import za.co.phumie.repository.PostRepository;
 import za.co.phumie.service.usersint.IComment;

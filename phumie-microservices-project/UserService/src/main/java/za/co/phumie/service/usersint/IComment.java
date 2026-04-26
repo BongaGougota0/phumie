@@ -1,7 +1,7 @@
 package za.co.phumie.service.usersint;
 
-import za.co.phumie.dto.ResponseDto;
-import za.co.phumie.model.Comment;
+import za.phumie.shared.appdtos.ResponseDto;
+import za.phumie.shared.appmodels.Comment;
 
 @FunctionalInterface
 public interface IComment {

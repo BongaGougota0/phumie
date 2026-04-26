@@ -1,8 +1,8 @@
 package za.co.phumie.mapper;
 
-import za.co.phumie.dto.PhumieUserDto;
-import za.co.phumie.model.PhumieUser;
-import za.co.phumie.model.UserRole;
+import za.phumie.shared.appdtos.PhumieUserDto;
+import za.phumie.shared.appmodels.PhumieUser;
+import za.phumie.shared.appmodels.UserRole;
 
 public class UserMapper {
 

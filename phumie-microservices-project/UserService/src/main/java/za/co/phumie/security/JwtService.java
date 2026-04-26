@@ -5,7 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import za.co.phumie.dto.PhumieUserDto;
+import za.phumie.shared.appdtos.PhumieUserDto;
 import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.util.Base64;

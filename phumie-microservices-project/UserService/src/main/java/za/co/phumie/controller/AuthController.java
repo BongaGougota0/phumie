@@ -5,10 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import za.co.phumie.dto.AuthenticationDto;
-import za.co.phumie.dto.LoginCredentials;
-import za.co.phumie.dto.PhumieUserDto;
-import za.co.phumie.dto.ResponseDto;
+import za.phumie.shared.appdtos.AuthenticationDto;
+import za.phumie.shared.appdtos.LoginCredentials;
+import za.phumie.shared.appdtos.PhumieUserDto;
+import za.phumie.shared.appdtos.ResponseDto;
 import za.co.phumie.service.UsersServiceImpl;
 
 @RestController
@@ -46,6 +46,7 @@ public class AuthController {
     @PostMapping(value = "/login")
     public ResponseEntity<AuthenticationDto> login(@RequestBody LoginCredentials loginCredentials){
             var responseData = usersServiceImpl.authenticateUser(loginCredentials);
-            return ResponseEntity.ok(responseData);
+//            return ResponseEntity.ok(responseData);
+        return null;
     }
 }

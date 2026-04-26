@@ -4,7 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import za.co.phumie.PostsService.dto.ResponseDto;
+import za.phumie.shared.appdtos.ResponseDto;
+
 import java.time.LocalDateTime;
 
 @RestControllerAdvice

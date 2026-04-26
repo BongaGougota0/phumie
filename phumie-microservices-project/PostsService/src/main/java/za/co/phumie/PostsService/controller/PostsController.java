@@ -8,15 +8,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import za.co.phumie.PostsService.dto.CommentDto;
-import za.co.phumie.PostsService.dto.PostDto;
-import za.co.phumie.PostsService.dto.ResponseDto;
 import za.co.phumie.PostsService.mapper.CommentMapper;
-import za.co.phumie.PostsService.model.Comment;
-import za.co.phumie.PostsService.model.Post;
 import za.co.phumie.PostsService.repository.CommentsRepository;
 import za.co.phumie.PostsService.service.PostsServiceImpl;
 import za.co.phumie.PostsService.service.postsInt.IComments;
+import za.phumie.shared.appdtos.CommentDto;
+import za.phumie.shared.appdtos.PostDto;
+import za.phumie.shared.appdtos.ResponseDto;
+import za.phumie.shared.appmodels.Comment;
+import za.phumie.shared.appmodels.Post;
+
 import java.time.LocalDateTime;
 import java.util.List;
 

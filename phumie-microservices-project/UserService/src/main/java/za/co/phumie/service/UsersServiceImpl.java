@@ -4,15 +4,15 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import za.co.phumie.dto.LoginCredentials;
-import za.co.phumie.dto.PhumieUserDto;
-import za.co.phumie.dto.ResponseDto;
+import za.phumie.shared.appdtos.LoginCredentials;
+import za.phumie.shared.appdtos.PhumieUserDto;
+import za.phumie.shared.appdtos.ResponseDto;
 import za.co.phumie.exception.IncorrectLoginCredentials;
 import za.co.phumie.exception.UserExistsException;
 import za.co.phumie.exception.UserNotFound;
 import za.co.phumie.mapper.UserMapper;
-import za.co.phumie.model.PhumieUser;
 import za.co.phumie.repository.UserRepository;
+import za.phumie.shared.appmodels.PhumieUser;
 import java.time.LocalDateTime;
 
 @Service

@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import za.co.phumie.model.Comment;
+import za.phumie.shared.appmodels.Comment;
 import java.util.List;
 
 @Repository

@@ -2,7 +2,7 @@ package za.co.likesService.LikeAPI.controller;
 
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-import za.co.likesService.LikeAPI.dto.LikeDTO;
+import za.phumie.shared.appdtos.LikeDTO;
 import za.co.likesService.LikeAPI.service.impl.LikesServiceImpl;
 
 @RestController

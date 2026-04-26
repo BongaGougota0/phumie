@@ -7,16 +7,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import za.co.phumie.PostsService.controller.PostsController;
-import za.co.phumie.PostsService.dto.CommentDto;
-import za.co.phumie.PostsService.dto.PostDto;
 import za.co.phumie.PostsService.exception.EmptyUsernamePostException;
 import za.co.phumie.PostsService.exception.PostNotFound;
 import za.co.phumie.PostsService.mapper.CommentMapper;
 import za.co.phumie.PostsService.mapper.PostMapper;
-import za.co.phumie.PostsService.model.Post;
 import za.co.phumie.PostsService.repository.CommentsRepository;
 import za.co.phumie.PostsService.repository.PostsRepository;
 import za.co.phumie.PostsService.service.postsInt.IPosts;
+import za.phumie.shared.appdtos.CommentDto;
+import za.phumie.shared.appdtos.PostDto;
+import za.phumie.shared.appmodels.Post;
+
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -67,7 +68,7 @@ public class PostsServiceImpl implements IPosts {
             throw new EmptyUsernamePostException(INVALID_POST_REQUEST);
         }
         post.setAuthorUserId(PostsController.transformUsernameToAuthorId(post.getAuthorUsername()));
-        post.setTimeStamp(LocalDateTime.now());
+        post.setCreatedAt(LocalDateTime.now());
         postsRepository.save(post);
     }
 

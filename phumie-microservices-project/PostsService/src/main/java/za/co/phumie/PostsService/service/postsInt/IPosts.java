@@ -1,9 +1,10 @@
 package za.co.phumie.PostsService.service.postsInt;
 
 import org.springframework.data.domain.Page;
-import za.co.phumie.PostsService.dto.CommentDto;
-import za.co.phumie.PostsService.dto.PostDto;
-import za.co.phumie.PostsService.model.Post;
+import za.phumie.shared.appdtos.CommentDto;
+import za.phumie.shared.appdtos.PostDto;
+import za.phumie.shared.appmodels.Post;
+
 import java.util.List;
 
 public interface IPosts {

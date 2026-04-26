@@ -2,7 +2,7 @@ package za.co.likesService.LikeAPI.service.impl;
 
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import za.co.likesService.LikeAPI.dto.LikeDTO;
+import za.phumie.shared.appdtos.LikeDTO;
 import za.co.likesService.LikeAPI.service.LikesService;
 
 @Service

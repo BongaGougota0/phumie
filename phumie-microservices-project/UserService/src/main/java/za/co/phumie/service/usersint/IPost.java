@@ -1,9 +1,9 @@
 package za.co.phumie.service.usersint;
 
 import org.springframework.data.domain.Page;
-import za.co.phumie.dto.CommentDto;
-import za.co.phumie.dto.PostDto;
-import za.co.phumie.model.Post;
+import za.phumie.shared.appdtos.CommentDto;
+import za.phumie.shared.appdtos.PostDto;
+import za.phumie.shared.appmodels.Post;
 import java.util.List;
 
 public interface IPost {

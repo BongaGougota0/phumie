@@ -4,7 +4,7 @@ import jakarta.annotation.PostConstruct;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
-import za.co.likesService.LikeAPI.dto.LikeDTO;
+import za.phumie.shared.appdtos.LikeDTO;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;

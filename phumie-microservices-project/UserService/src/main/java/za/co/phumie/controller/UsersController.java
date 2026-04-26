@@ -3,8 +3,8 @@ package za.co.phumie.controller;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import za.co.phumie.dto.PhumieUserDto;
-import za.co.phumie.dto.ResponseDto;
+import za.phumie.shared.appdtos.PhumieUserDto;
+import za.phumie.shared.appdtos.ResponseDto;
 import za.co.phumie.service.UsersServiceImpl;
 
 @RestController
