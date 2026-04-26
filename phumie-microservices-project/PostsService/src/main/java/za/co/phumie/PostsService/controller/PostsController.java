@@ -11,13 +11,13 @@ import org.springframework.web.client.RestTemplate;
 import za.co.phumie.PostsService.mapper.CommentMapper;
 import za.co.phumie.PostsService.repository.CommentsRepository;
 import za.co.phumie.PostsService.service.PostsServiceImpl;
+import za.co.phumie.PostsService.service.PostsServiceImplV2;
 import za.co.phumie.PostsService.service.postsInt.IComments;
 import za.phumie.shared.appdtos.CommentDto;
 import za.phumie.shared.appdtos.PostDto;
 import za.phumie.shared.appdtos.ResponseDto;
 import za.phumie.shared.appmodels.Comment;
 import za.phumie.shared.appmodels.Post;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,11 +27,14 @@ public class PostsController {
     Logger logger = LoggerFactory.getLogger(PostsController.class);
 
     private final PostsServiceImpl postsServiceImpl;
+    private final PostsServiceImplV2 postsServiceImplV2;
     private final CommentsRepository commentsRepository;
 
     public PostsController(PostsServiceImpl postsServiceImpl,
+                           PostsServiceImplV2 postsServiceImplV2,
                            CommentsRepository commentsRepository) {
         this.postsServiceImpl = postsServiceImpl;
+        this.postsServiceImplV2 = postsServiceImplV2;
         this.commentsRepository = commentsRepository;
     }
 

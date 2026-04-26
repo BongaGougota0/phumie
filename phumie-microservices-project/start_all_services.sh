@@ -3,7 +3,7 @@
 echo "Starting Eureka..."
 cd service
 # java -Xms64m -Xmx128m -jar target/.jar &
-java -Xms64m -Xmx128m -jar build/libs/*.jar &
+java -Xms64m -Xmx128m -jar build/libs/service_registry_application-0.0.1-SNAPSHOT.war &
 sleep 10  # 
 
 echo "Starting API Gateway..."

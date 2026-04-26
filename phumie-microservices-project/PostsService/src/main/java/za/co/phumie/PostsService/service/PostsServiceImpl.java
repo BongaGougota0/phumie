@@ -65,7 +65,7 @@ public class PostsServiceImpl implements IPosts {
         if(post == null){
             throw new EmptyUsernamePostException(INVALID_POST_REQUEST);
         }
-        post.setAuthorUserId(PostsController.transformUsernameToAuthorId(post.getAuthorUsername()));
+//        post.setAuthorUserId(PostsController.transformUsernameToAuthorId(post.getAuthorUsername()));
         post.setCreatedAt(LocalDateTime.now());
         postsRepository.save(post);
     }

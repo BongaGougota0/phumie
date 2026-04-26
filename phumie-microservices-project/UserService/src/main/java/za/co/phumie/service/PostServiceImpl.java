@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import za.phumie.shared.appdtos.CommentDto;
 import za.phumie.shared.appdtos.PostDto;
 import za.co.phumie.exception.EmptyUsernamePostException;
@@ -16,10 +17,7 @@ import za.phumie.shared.appmodels.Post;
 import za.co.phumie.repository.CommentRepository;
 import za.co.phumie.repository.PostRepository;
 import za.co.phumie.service.usersint.IPost;
-
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements IPost {
@@ -39,9 +37,10 @@ public class PostServiceImpl implements IPost {
         return postsRepository.findPostByPostId(postId);
     }
 
-    public List<PostDto> getRandomPostsForWelcomeScreen() {
-        return postsRepository.findAll().stream().limit(5)
-                .map(PostMapper::mapEntityToDto).collect(Collectors.toList());
+    public Flux<PostDto> getRandomPostsForWelcomeScreen() {
+        return postsRepository.findAll()
+                .take(5)
+                .map(PostMapper::mapEntityToDto);
     }
 
     @Override
@@ -53,11 +52,10 @@ public class PostServiceImpl implements IPost {
     }
 
     @Override
-    public List<CommentDto> getPostComments(long postId) {
-        List<CommentDto> allComments = commentsRepository
+    public Flux<CommentDto> getPostComments(long postId) {
+        return commentsRepository
                 .findAllById(Collections.singleton(postId))
-                .stream().map(CommentMapper::toDto).collect(Collectors.toList());
-        return allComments;
+                .map(CommentMapper::toDto);
     }
 
     @Override
@@ -69,7 +67,7 @@ public class PostServiceImpl implements IPost {
     }
 
     @Override
-    public Page<Post> getUserPostsByUsernameOrId(long authorId, int pageNumber) {
+    public Flux<Post> getUserPostsByUsernameOrId(long authorId, int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber, 10, Sort.by("time_stamp").descending());
         return postsRepository.getPostByAuthorUserId(authorId, pageable);
     }

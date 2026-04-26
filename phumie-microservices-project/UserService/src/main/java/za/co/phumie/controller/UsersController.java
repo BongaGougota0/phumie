@@ -3,6 +3,7 @@ package za.co.phumie.controller;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 import za.phumie.shared.appdtos.PhumieUserDto;
 import za.phumie.shared.appdtos.ResponseDto;
 import za.co.phumie.service.UsersServiceImpl;
@@ -17,7 +18,7 @@ public class UsersController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<PhumieUserDto> getUserById(@PathVariable("userId") Long userId){
+    public ResponseEntity<Mono<PhumieUserDto>> getUserById(@PathVariable("userId") Long userId){
         return ResponseEntity.ok().body(usersServiceImpl.getUserById(userId));
     }
 

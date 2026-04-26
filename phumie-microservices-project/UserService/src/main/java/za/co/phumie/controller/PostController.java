@@ -3,6 +3,7 @@ package za.co.phumie.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import za.phumie.shared.appdtos.PostDto;
 import za.phumie.shared.appdtos.ResponseDto;
 import za.co.phumie.service.PostServiceImpl;
@@ -35,7 +36,7 @@ public class PostController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<PostDto>> getPosts(){
+    public ResponseEntity<Flux<PostDto>> getPosts(){
         var posts = postService.getRandomPostsForWelcomeScreen();
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }

@@ -4,16 +4,16 @@ spring:
   application:
     name: user-service
 
-  datasource:
-    url: jdbc:mysql://localhost:3306/phumie_project
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/phumie_project
     username: root
     password: "@ZXCp0001"
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:
-      maximum-pool-size: 10 # Maximum number of connections in the pool
-      minimum-idle: 2 # Minimum number of idle connections
-      idle-timeout: 30000 # Time in milliseconds before an idle connection is removed
-      max-lifetime: 1800000 # Maximum lifetime of a connection in the pool
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    hikari:
+#      maximum-pool-size: 10 # Maximum number of connections in the pool
+#      minimum-idle: 2 # Minimum number of idle connections
+#      idle-timeout: 30000 # Time in milliseconds before an idle connection is removed
+#      max-lifetime: 1800000 # Maximum lifetime of a connection in the pool
 
   # JPA (Hibernate) configuration
   jpa:

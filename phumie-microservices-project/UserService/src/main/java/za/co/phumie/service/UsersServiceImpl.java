@@ -4,6 +4,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 import za.phumie.shared.appdtos.LoginCredentials;
 import za.phumie.shared.appdtos.PhumieUserDto;
 import za.phumie.shared.appdtos.ResponseDto;
@@ -47,11 +48,12 @@ public class UsersServiceImpl {
     }
 
     @Cacheable(value = "userDtosCache", unless = "#result == null")
-    public PhumieUserDto getUserById(Long userid){
-        PhumieUser user = userRepository.findById(userid).orElseThrow(
-                () -> new UserNotFound(String.format("User with id %s not found", userid))
-        );
-        return UserMapper.mapEntityToDto(user);
+    public Mono<PhumieUserDto> getUserById(Long userid) {
+        return userRepository.findById(userid)
+                .switchIfEmpty(Mono.error(
+                        new UserNotFound(String.format("User with id %s not found", userid))
+                ))
+                .map(UserMapper::mapEntityToDto);
     }
 
     @Cacheable(value = "userIdsCache", unless = "#result == null")

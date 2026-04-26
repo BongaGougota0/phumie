@@ -1,6 +1,7 @@
 package za.co.phumie.service.usersint;
 
 import org.springframework.data.domain.Page;
+import reactor.core.publisher.Flux;
 import za.phumie.shared.appdtos.CommentDto;
 import za.phumie.shared.appdtos.PostDto;
 import za.phumie.shared.appmodels.Post;
@@ -11,7 +12,7 @@ public interface IPost {
      *
      * @return get most recent created post. use limit
      */
-    List<PostDto> getRandomPostsForWelcomeScreen();
+    Flux<PostDto> getRandomPostsForWelcomeScreen();
 
     /**
      *
@@ -25,7 +26,7 @@ public interface IPost {
      * @param postId -unique identifier for this posts.
      * @return - all comments that reference this post (post_id)
      */
-    List<CommentDto> getPostComments(long postId);
+    Flux<CommentDto> getPostComments(long postId);
 
     /**
      *
@@ -40,5 +41,5 @@ public interface IPost {
      * @param pageNumber paginated results of user posts with their postIds
      * @return
      */
-    Page<Post> getUserPostsByUsernameOrId(long authorId, int pageNumber);
+    Flux<Post> getUserPostsByUsernameOrId(long authorId, int pageNumber);
 }
