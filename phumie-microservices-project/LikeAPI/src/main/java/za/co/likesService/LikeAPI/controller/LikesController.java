@@ -1,22 +1,22 @@
 package za.co.likesService.LikeAPI.controller;
 
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
-import za.phumie.shared.appdtos.LikeDTO;
-import za.co.likesService.LikeAPI.service.impl.LikesServiceImpl;
+import za.co.likesService.LikeAPI.service.LikesService;
+import za.phumie.shared.mapper.ApplicationMapper;
 
 @RestController
 @RequestMapping(value = "api/likes")
 public class LikesController {
 
-    private final LikesServiceImpl likesService;
+    private final LikesService likesService;
 
-    public LikesController(LikesServiceImpl likesService) {
+    public LikesController(LikesService likesService) {
         this.likesService = likesService;
     }
 
     @PostMapping
-    public Mono<Void> likePost(@RequestBody Mono<LikeDTO> likeDTO) {
-        return likesService.addLike(likeDTO);
+    public void likePost(@RequestBody ApplicationMapper.PostLikeDto likeDTO) {
+        likesService.addUserLike(likeDTO);
+//        return Mono.just(obj).then();
     }
 }
