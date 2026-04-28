@@ -10,34 +10,41 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Table
+@Table(name = "phumie_users")
 public class PhumieUser {
+
     @Id
+    @Column("user_id")
     private Long userId;
 
-    @Column
+    @Column("username")
     private String username;
 
-    @Column
+    @Column("user_email")
     private String userEmail;
 
+    @Column("password_hash")
     private String passwordHash;
+
+    @Column("user_role")
     private UserRole userRole;
+
+    @Column("about_user")
     private String aboutUser;
+
+    @Column("avatar_url")
     private String avatarUrl;
 
-    // Denormalized counts — avoids COUNT(*) joins on every profile load
-    @Column
+    @Column("follower_count")
     private int followerCount = 0;
 
-    @Column
+    @Column("following_count")
     private int followingCount = 0;
 
-    @Column
-    private boolean isActive = true;
+    @Column("active")          // renamed: avoids Lombok isIsActive() bug
+    private boolean active = true;
 
+    @CreatedDate               // must be on the field, not a method
+    @Column("created_at")
     private LocalDateTime createdAt;
-
-    @CreatedDate
-    protected void onCreate() { this.createdAt = LocalDateTime.now(); }
 }

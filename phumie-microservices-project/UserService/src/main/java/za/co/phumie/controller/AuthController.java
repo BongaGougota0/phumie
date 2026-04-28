@@ -7,9 +7,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import za.phumie.shared.appdtos.AuthenticationDto;
 import za.phumie.shared.appdtos.LoginCredentials;
-import za.phumie.shared.appdtos.PhumieUserDto;
 import za.phumie.shared.appdtos.ResponseDto;
 import za.co.phumie.service.UsersServiceImpl;
+import za.phumie.shared.mapper.ApplicationMapper;
 
 @RestController
 @RequestMapping(value = "/api/auth")
@@ -26,14 +26,14 @@ public class AuthController {
     // Signup user and login user.
     // In case of existing username or email. Application throws error 409 Conflict.
     @PostMapping(value = "/signup")
-    public Mono<ResponseEntity<AuthenticationDto>> signup(@RequestBody PhumieUserDto newUser) {
-        ResponseDto resp = usersServiceImpl.save(newUser);
-        if(resp.getMessage().equalsIgnoreCase("Success")){
+    public Mono<ResponseEntity<AuthenticationDto>> signup(@RequestBody ApplicationMapper.PhumieUserDto newUser) {
+        Mono<ResponseDto> resp = usersServiceImpl.save(newUser);
+        if(resp.block().getMessage().equalsIgnoreCase("Success")){
             return webClient
                     .build()
                     .post()
                     .uri("http://localhost:8080/api/auth/login")
-                    .bodyValue(new LoginCredentials(newUser.userEmail(), newUser.password()))
+                    .bodyValue(new LoginCredentials(newUser.userEmail(), newUser.passwordHash()))
                     .retrieve()
                     .bodyToMono(AuthenticationDto.class)
                     .map(authDto -> new ResponseEntity<>(authDto, HttpStatus.OK))
@@ -44,9 +44,8 @@ public class AuthController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<AuthenticationDto> login(@RequestBody LoginCredentials loginCredentials){
-            var responseData = usersServiceImpl.authenticateUser(loginCredentials);
-//            return ResponseEntity.ok(responseData);
-        return null;
+    public ResponseEntity<AuthenticationDto> login(@RequestBody LoginCredentials loginCredentials) {
+            Mono<ApplicationMapper.PhumieUserDto> userDto = usersServiceImpl.authenticateUser(loginCredentials);
+            return ResponseEntity.ok(new AuthenticationDto("", userDto));
     }
 }

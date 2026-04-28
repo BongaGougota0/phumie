@@ -13,9 +13,11 @@ public class ApplicationMapper {
 
     public record PhumieUserDto(
             Long userId,
+            String userEmail,
             String username,
             String aboutUser,
             String avatarUrl,
+            String passwordHash,
             int followerCount
     ) {}
 
@@ -65,9 +67,11 @@ public class ApplicationMapper {
 
         return new PhumieUserDto(
                 user.getUserId(),
+                user.getUserEmail(),
                 user.getUsername(),
                 user.getAboutUser(),
                 user.getAvatarUrl(),
+                "",
                 user.getFollowerCount()
         );
     }
@@ -198,6 +202,8 @@ public class ApplicationMapper {
         PhumieUser user = new PhumieUser();
         user.setUserId(dto.userId());
         user.setUsername(dto.username());
+        user.setUserEmail(dto.userEmail());
+        user.setPasswordHash(dto.passwordHash);
         user.setAboutUser(dto.aboutUser());
         user.setAvatarUrl(dto.avatarUrl());
         user.setFollowerCount(dto.followerCount());

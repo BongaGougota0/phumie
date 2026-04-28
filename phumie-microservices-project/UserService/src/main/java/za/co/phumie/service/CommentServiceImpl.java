@@ -31,7 +31,7 @@ public class CommentServiceImpl implements IComment {
         var post = postRepository.findPostByPostId(comment.getCommentId());
         if(post != null) {
             ResponseDto responseDto = new ResponseDto();
-            post.getComments().add(comment);
+//            post.getComments().add(comment);
             postRepository.save(post);
             comment.setPost(post);
             commentRepository.save(comment);

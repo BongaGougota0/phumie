@@ -4,9 +4,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-import za.phumie.shared.appdtos.PhumieUserDto;
 import za.phumie.shared.appdtos.ResponseDto;
 import za.co.phumie.service.UsersServiceImpl;
+import za.phumie.shared.mapper.ApplicationMapper;
 
 @RestController
 @RequestMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -18,13 +18,14 @@ public class UsersController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Mono<PhumieUserDto>> getUserById(@PathVariable("userId") Long userId){
+    public ResponseEntity<Mono<ApplicationMapper.PhumieUserDto>> getUserById(@PathVariable("userId") Long userId){
         return ResponseEntity.ok().body(usersServiceImpl.getUserById(userId));
     }
 
     @GetMapping()
     public ResponseEntity<Long> getUserIdByUsername(@RequestParam("username") String username){
-        return ResponseEntity.ok().body(usersServiceImpl.getUserByUsername(username));
+//        return ResponseEntity.ok().body(usersServiceImpl.(username));
+        return null;
     }
 
     @PostMapping("/logout")
@@ -33,15 +34,15 @@ public class UsersController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponseDto> updateUser(@RequestBody PhumieUserDto phumieUserDto){
-        return ResponseEntity.ok().body(usersServiceImpl.putUserDetails(phumieUserDto));
+    public Mono<ResponseDto> updateUser(@RequestBody ApplicationMapper.PhumieUserDto phumieUserDto){
+        return usersServiceImpl.putUserDetails(phumieUserDto);
     }
 
     @PutMapping()
     public ResponseEntity<ResponseDto> updateUserName(@RequestParam("oldUsername") String oldUsername,
-                                                      @RequestBody PhumieUserDto phumieUserDto){
-        boolean isUpdated = usersServiceImpl.putUsername(oldUsername, phumieUserDto);
-        if(isUpdated){
+                                                      @RequestBody ApplicationMapper.PhumieUserDto phumieUserDto){
+        Mono<Boolean> isUpdated = usersServiceImpl.putUsername(oldUsername, phumieUserDto);
+        if(isUpdated.block().booleanValue()){
             var response = new ResponseDto();
             response.setMessage("username updated");
             return ResponseEntity.ok().body(response);
@@ -51,7 +52,7 @@ public class UsersController {
     }
 
     @PutMapping("/change-password")
-    public ResponseEntity<ResponseDto> changeUserPassword(@RequestBody PhumieUserDto phumieUserDto){
+    public ResponseEntity<ResponseDto> changeUserPassword(@RequestBody ApplicationMapper.PhumieUserDto phumieUserDto){
         usersServiceImpl.putPassword(phumieUserDto);
         var response = new ResponseDto();
         response.setMessage("Password updated");

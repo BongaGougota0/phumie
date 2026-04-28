@@ -33,7 +33,8 @@ public class Comment {
     private String imageUrl;
 
     // Self-referencing for nested replies (null = top-level comment)
-    private Comment parentComment;
+//    private Comment parentComment;
+    private Long parentComment;
 
 //    @ToString.Exclude
 //    private List<Comment> replies = new ArrayList<>();

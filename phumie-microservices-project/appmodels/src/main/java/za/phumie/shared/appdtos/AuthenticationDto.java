@@ -1,4 +1,7 @@
 package za.phumie.shared.appdtos;
 
-public record AuthenticationDto(String jwt, PhumieUserDto phumieUserDto) {
+import reactor.core.publisher.Mono;
+import za.phumie.shared.mapper.ApplicationMapper;
+
+public record AuthenticationDto(String jwt, Mono<ApplicationMapper.PhumieUserDto> phumieUserDto) {
 }

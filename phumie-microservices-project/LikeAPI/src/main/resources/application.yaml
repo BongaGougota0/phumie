@@ -4,3 +4,11 @@ server:
 spring:
   application:
     name: likes-service
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/phumie_project
+    username: root
+    password: "@ZXCp0001"

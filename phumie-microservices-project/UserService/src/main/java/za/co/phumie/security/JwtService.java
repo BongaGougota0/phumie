@@ -5,7 +5,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import za.phumie.shared.appdtos.PhumieUserDto;
+import za.phumie.shared.mapper.ApplicationMapper;
+
 import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.util.Base64;
@@ -26,12 +27,12 @@ public class JwtService {
     @Value("${app.jwt-issuer}")
     public String JWT_ISSUER;
 
-    public String generateToken(PhumieUserDto user) {
+    public String generateToken(ApplicationMapper.PhumieUserDto user) {
         Map<String, String> claims = new HashMap<>();
         claims.put("issuer", JWT_ISSUER);
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(user.userEmail())
+                .setSubject(user.username())
                 .setIssuedAt(Date.from(Instant.now()))
                 .setExpiration(Date.from(Instant.now().plusMillis(TimeUnit.MINUTES.toMillis(VALIDITY_PERIOD))))
                 .signWith(generateSecretKey())
