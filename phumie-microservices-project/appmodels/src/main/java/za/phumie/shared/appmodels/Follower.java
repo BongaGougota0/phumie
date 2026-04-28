@@ -1,18 +1,18 @@
 package za.phumie.shared.appmodels;
 
-import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Data
-@Entity(name = "followers")
+@Getter
+@Setter
+@Table
 public class Follower {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long subjectUserId;
     private String followerUsername;
     private Long followerId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
     private PhumieUser user;
 }

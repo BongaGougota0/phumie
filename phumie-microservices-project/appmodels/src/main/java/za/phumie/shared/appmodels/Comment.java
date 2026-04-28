@@ -1,61 +1,51 @@
 package za.phumie.shared.appmodels;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Setter
 @Getter
-@Table(name = "comments",
-        indexes = {
-                @Index(name = "idx_comment_post", columnList = "post_id"),
-                @Index(name = "idx_comment_parent", columnList = "parent_comment_id"),
-                @Index(name = "idx_comment_author", columnList = "author_user_id")
-        }
-)
+@Table
 public class Comment {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long commentId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    @Column(nullable = false)
+    @Column
     private Long authorUserId;
 
-    @Column(nullable = false)
+    @Column
     private String authorUsername;
 
     private String textContent;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private CommentMediaType mediaType;
+    @Column
+//    private CommentMediaType mediaType;
+    private String mediaType;
 
     private String imageUrl;
 
     // Self-referencing for nested replies (null = top-level comment)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_comment_id")
     private Comment parentComment;
 
-    @OneToMany(mappedBy = "parentComment", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private List<Comment> replies = new ArrayList<>();
+//    @ToString.Exclude
+//    private List<Comment> replies = new ArrayList<>();
 
-    @Column(nullable = false)
+    @Column
     private int likeCount = 0;
 
-    @Column(nullable = false)
+    @Column
     private boolean isDeleted = false;
 
     private LocalDateTime createdAt;
 
-    @PrePersist
+    @CreatedDate
     protected void onCreate() { this.createdAt = LocalDateTime.now(); }
 }

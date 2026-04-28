@@ -1,36 +1,33 @@
 package za.phumie.shared.appmodels;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "post_likes",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"post_id", "user_id"}),
-        indexes = {
-                @Index(name = "idx_post_like_post", columnList = "post_id"),
-                @Index(name = "idx_post_like_user", columnList = "user_id")
-        }
-)
+@Table
 public class PostLike {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private Long postId;
 
-    @Column(nullable = false)
+    @Column
     private Long userId;
 
     // Combining like + favourite into one row avoids a second table
-    @Column(nullable = false)
+    @Column
     private boolean isFavourited = false;
 
+    @CreatedDate
     private LocalDateTime createdAt;
 
-    @PrePersist
-    protected void onCreate() { this.createdAt = LocalDateTime.now(); }
+//    @CreatedDate
+//    protected void onCreate() { this.createdAt = LocalDateTime.now(); }
 }

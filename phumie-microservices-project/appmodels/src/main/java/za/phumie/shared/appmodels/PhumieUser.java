@@ -1,23 +1,24 @@
 package za.phumie.shared.appmodels;
 
-
-import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "phumie_users")
+@Table
 public class PhumieUser {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long userId;
 
-    @Column(unique = true, nullable = false)
+    @Column
     private String username;
 
-    @Column(unique = true, nullable = false)
+    @Column
     private String userEmail;
 
     private String passwordHash;
@@ -26,17 +27,17 @@ public class PhumieUser {
     private String avatarUrl;
 
     // Denormalized counts — avoids COUNT(*) joins on every profile load
-    @Column(nullable = false)
+    @Column
     private int followerCount = 0;
 
-    @Column(nullable = false)
+    @Column
     private int followingCount = 0;
 
-    @Column(nullable = false)
+    @Column
     private boolean isActive = true;
 
     private LocalDateTime createdAt;
 
-    @PrePersist
+    @CreatedDate
     protected void onCreate() { this.createdAt = LocalDateTime.now(); }
 }

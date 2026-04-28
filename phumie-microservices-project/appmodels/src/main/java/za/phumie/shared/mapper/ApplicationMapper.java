@@ -80,7 +80,7 @@ public class ApplicationMapper {
                 post.getAuthorUserId(),
                 post.getAuthorUsername(),
                 post.getTextContent(),
-                post.getMediaType() != null ? post.getMediaType().name() : null,
+                post.getMediaType() != null ? post.getMediaType() : null,
                 post.getImageUrl(),
                 post.getCommentCount(),
                 post.getCreatedAt()
@@ -213,7 +213,7 @@ public class ApplicationMapper {
         post.setAuthorUserId(dto.authorUserId());
         post.setAuthorUsername(dto.authorUsername());
         post.setTextContent(dto.textContent());
-        post.setMediaType(dto.mediaType() != null ? PostMediaType.valueOf(dto.mediaType()) : null);
+        post.setMediaType(dto.mediaType() != null ? String.valueOf(PostMediaType.valueOf(dto.mediaType())) : null);
         post.setImageUrl(dto.imageUrl());
         post.setCommentCount(dto.commentCount());
 
